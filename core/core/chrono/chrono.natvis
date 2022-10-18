@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="egret::chrono::calendar">
+		<Expand>
+			<ExpandedItem>*impl_</ExpandedItem>
+		</Expand>
+	</Type>
+	<Type Name="egret::chrono::calendar_server">
+		<Expand>
+			<ExpandedItem>*impl_</ExpandedItem>
+		</Expand>
+	</Type>
+	<Type Name="egret::chrono::any_calendar_source">
+		<DisplayString>{*obj_}</DisplayString>
+		<Expand>
+			<ExpandedItem>*obj_</ExpandedItem>
+		</Expand>
+	</Type>
+	<Type Name="egret::chrono::any_calendar_source::concrete&lt;*&gt;">
+		<Expand>
+			<ExpandedItem>obj_</ExpandedItem>
+		</Expand>
+	</Type>
+</AutoVisualizer>

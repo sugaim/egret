@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{6034b959-4030-4c36-a8be-1b120dfec37b}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)assertions\src\exception.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\calendar.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\calendar_json_impl.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\calendar_server.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\json_directory_calendar_source.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\stopwatch.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\tenor.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)assertions\assertion.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)assertions\exception.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)assertions\fail.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)auto_link.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\any_calendar_source.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\calendar.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\calendar_identifier.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\calendar_server.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\json_directory_calendar_source.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\json_map_calendar_source.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\redundant_calendar_source.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\src\calendar_json_impl.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\stopwatch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\tenor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\constructible_to.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\decayed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\different_from.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\non_reference.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\non_void.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\qualified.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)concepts\range_of.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\der.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\integrate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\any.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\find_index_and_relpos.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\integrate_impl.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\interpolatee_validation.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\interval_at.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\json_deserializer_impl.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\linear.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\proxy.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\pwconst.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\solver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\solver\iteration_result.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\solver\newton1d.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\stats.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\stats\normal_distribution.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)type_traits\are_same.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)type_traits\is_specialization_of.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)type_traits\special_functions_properties.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\construct.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\debug_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\debug_utils\debug_data.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\initialize_with.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\chrono.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\dispatchable.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\json_deserializer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\data_type.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\interface.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\constructor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\property.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\tuple.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\variant_to_json.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\get.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\map.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\optional.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\transformed.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\json_utils\j2obj\variant.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\maybe.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\member_data.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\named_argument.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\pointer_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\pointer_utils\init_shared_by_default.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\pointer_utils\init_unique_by_default.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\range_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\range_utils\find_interval.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\range_utils\vector_assign.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\case_insensitive.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\insensitive_strcmp.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\parse.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\string_type_map.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\string_value_map_of.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\to_string.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\string_utils\trim.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\update_with.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\variant_utils.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)utils\variant_utils\type_info.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)chrono\chrono.natvis" />
+  </ItemGroup>
+</Project>

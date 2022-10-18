@@ -1,0 +1,85 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.32916.344
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{C7C26527-85AD-4A01-9399-ABD1CF9FD208}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core\core\core.vcxitems", "{6034B959-4030-4C36-A8BE-1B120DFEC37B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egret", "egret\egret\egret.vcxitems", "{E8C35B46-E92F-4597-AF26-C6130592CC22}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{A75724AA-FCEF-4CFB-8CE9-5418E43E4B5B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox", "sandbox\sandbox\sandbox.vcxitems", "{D98C0772-E37D-456F-A249-0FC10FB99370}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win.apps", "win.apps", "{F7D8731B-97C5-42D6-8773-AAB9BC4C0200}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox.win", "sandbox\buildproj\sandbox.win.vcxproj", "{0002651D-5C06-4D25-962A-58C17626F9C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win.libs", "win.libs", "{8EEDB738-F3EC-432B-89A9-D5617F4E529B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.win", "core\buildproj\core.win.vcxproj", "{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egret.win", "egret\buildproj\egret.win.vcxproj", "{842AE741-19C4-4418-B493-FAF1D6D2C43E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thirdparty", "thirdparty\thirdparty\thirdparty.vcxitems", "{055A0DC0-C57B-4E33-B79A-5B2559333773}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Debug|x64.ActiveCfg = Debug|x64
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Debug|x64.Build.0 = Debug|x64
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Debug|x86.ActiveCfg = Debug|Win32
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Debug|x86.Build.0 = Debug|Win32
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Release|x64.ActiveCfg = Release|x64
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Release|x64.Build.0 = Release|x64
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Release|x86.ActiveCfg = Release|Win32
+		{0002651D-5C06-4D25-962A-58C17626F9C3}.Release|x86.Build.0 = Release|Win32
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Debug|x64.ActiveCfg = Debug|x64
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Debug|x64.Build.0 = Debug|x64
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Debug|x86.ActiveCfg = Debug|Win32
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Debug|x86.Build.0 = Debug|Win32
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Release|x64.ActiveCfg = Release|x64
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Release|x64.Build.0 = Release|x64
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Release|x86.ActiveCfg = Release|Win32
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}.Release|x86.Build.0 = Release|Win32
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Debug|x64.ActiveCfg = Debug|x64
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Debug|x64.Build.0 = Debug|x64
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Debug|x86.ActiveCfg = Debug|Win32
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Debug|x86.Build.0 = Debug|Win32
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Release|x64.ActiveCfg = Release|x64
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Release|x64.Build.0 = Release|x64
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Release|x86.ActiveCfg = Release|Win32
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6034B959-4030-4C36-A8BE-1B120DFEC37B} = {C7C26527-85AD-4A01-9399-ABD1CF9FD208}
+		{E8C35B46-E92F-4597-AF26-C6130592CC22} = {C7C26527-85AD-4A01-9399-ABD1CF9FD208}
+		{D98C0772-E37D-456F-A249-0FC10FB99370} = {A75724AA-FCEF-4CFB-8CE9-5418E43E4B5B}
+		{0002651D-5C06-4D25-962A-58C17626F9C3} = {F7D8731B-97C5-42D6-8773-AAB9BC4C0200}
+		{4B0804D9-1A4B-4836-AA6D-8D8F8F528092} = {8EEDB738-F3EC-432B-89A9-D5617F4E529B}
+		{842AE741-19C4-4418-B493-FAF1D6D2C43E} = {8EEDB738-F3EC-432B-89A9-D5617F4E529B}
+		{055A0DC0-C57B-4E33-B79A-5B2559333773} = {C7C26527-85AD-4A01-9399-ABD1CF9FD208}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {033C4363-C3C9-45C3-BF1D-ED1DC781A1EA}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		sandbox\sandbox\sandbox.vcxitems*{0002651d-5c06-4d25-962a-58c17626f9c3}*SharedItemsImports = 4
+		thirdparty\thirdparty\thirdparty.vcxitems*{055a0dc0-c57b-4e33-b79a-5b2559333773}*SharedItemsImports = 9
+		core\core\core.vcxitems*{4b0804d9-1a4b-4836-aa6d-8d8f8f528092}*SharedItemsImports = 4
+		core\core\core.vcxitems*{6034b959-4030-4c36-a8be-1b120dfec37b}*SharedItemsImports = 9
+		egret\egret\egret.vcxitems*{842ae741-19c4-4418-b493-faf1d6d2c43e}*SharedItemsImports = 4
+		sandbox\sandbox\sandbox.vcxitems*{d98c0772-e37d-456f-a249-0fc10fb99370}*SharedItemsImports = 9
+		egret\egret\egret.vcxitems*{e8c35b46-e92f-4597-af26-c6130592cc22}*SharedItemsImports = 9
+	EndGlobalSection
+EndGlobal

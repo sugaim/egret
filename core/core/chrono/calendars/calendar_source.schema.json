@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "additional_holidays": {
+      "$ref": "#/definitions/date_list",
+      "$comment": "weekdays which are holidays"
+    },
+    "additional_bussinessdays": {
+      "$ref": "#/definitions/date_list",
+      "$comment": "weekends which are business days"
+    }
+  },
+  "definitions": {
+    "date_list": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "date"
+      }
+    }
+  }
+}

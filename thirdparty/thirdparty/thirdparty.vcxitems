@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{055a0dc0-c57b-4e33-b79a-5b2559333773}</ItemsProjectGuid>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\adl_serializer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\byte_container_with_subtype.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\abi_macros.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\conversions\from_json.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\conversions\to_chars.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\conversions\to_json.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\exceptions.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\hash.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\input\binary_reader.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\input\input_adapters.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\input\json_sax.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\input\lexer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\input\parser.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\input\position_t.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\iterators\internal_iterator.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\iterators\iteration_proxy.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\iterators\iterator_traits.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\iterators\iter_impl.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\iterators\json_reverse_iterator.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\iterators\primitive_iterator.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\json_pointer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\json_ref.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\macro_scope.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\macro_unscope.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\call_std\begin.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\call_std\end.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\cpp_future.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\detected.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\identity_tag.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\is_sax.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\std_fs.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\type_traits.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\meta\void_t.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\output\binary_writer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\output\output_adapters.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\output\serializer.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\string_concat.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\string_escape.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\detail\value_t.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\json.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\json_fwd.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\ordered_map.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\thirdparty\hedley\hedley.hpp" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\thirdparty\hedley\hedley_undef.hpp" />
+  </ItemGroup>
+</Project>
