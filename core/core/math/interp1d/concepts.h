@@ -82,13 +82,29 @@ namespace egret_detail::interp1d_impl {
     void distance(auto&&, auto&&) = delete;
 
     class distance_t {
+    private:
+        template <typename X, typename Y>
+        using definition = egret::math::interp1d::distance_definition<X, Y>;
+
     public:
         template <typename X, typename Y>
-            requires std::is_invocable_v<egret::math::interp1d::distance_definition<X, Y>, const X&, const Y&>
+            requires std::is_invocable_v<definition<X, Y>, const X&, const Y&>
         constexpr auto operator()(const X& from, const Y& to) const
-            noexcept(std::is_nothrow_invocable_v<egret::math::interp1d::distance_definition<X, Y>, const X&, const Y&>)
+            noexcept(std::is_nothrow_invocable_v<definition<X, Y>, const X&, const Y&>)
         {
-            return egret::math::interp1d::distance_definition<X, Y>{}(from, to);
+            return definition<X, Y>{}(from, to);
+        }
+        template <typename X, typename Y>
+            requires 
+                (!std::is_invocable_v<definition<X, Y>, const X&, const Y&>) &&
+                (std::is_invocable_v<definition<Y, X>, const X&, const Y&>) &&
+                requires (std::invoke_result_t<definition<Y, X>, const X&, const Y&> inv) {
+                    - inv;
+                }
+        constexpr auto operator()(const X& from, const Y& to) const
+            noexcept(noexcept(- definition<Y, X>{}(to, from)))
+        {
+            return - definition<Y, X>{}(to, from);
         }
 
     }; // class distance_t 
@@ -118,7 +134,7 @@ namespace egret::math::interp1d {
 // -----------------------------------------------------------------------------
     template <typename T, typename Base>
     concept distance_measurable_from = requires (const Base& from, const T& to) {
-        { math::interp1d::distance(from, to) } -> cpt::non_void;
+        { interp1d::distance(from, to) } -> cpt::non_void;
     };
 
     template <typename T>
@@ -128,7 +144,35 @@ namespace egret::math::interp1d {
 //  [type] distance_result_t
 // -----------------------------------------------------------------------------
     template <typename X, typename Y = X>
-    using distance_result_t = decltype(interp1d::distance(std::declval<const X&>(), std::declval<const Y&>()));
+        requires distance_measurable_from<X, Y>
+    using distance_result_t = std::remove_cvref_t<
+        decltype(interp1d::distance(std::declval<const X&>(), std::declval<const Y&>()))
+    >;
+
+// -----------------------------------------------------------------------------
+//  [concept] relpos_computable_from
+//  [concept] relpos_computable
+// -----------------------------------------------------------------------------
+    template <typename X, typename Base>
+    concept relpos_computable_from =
+        distance_measurable_from<X, Base> &&
+        requires (const X& x, const Base& base, const X& base_end) {
+            { interp1d::distance(base, x) / interp1d::distance(base, base_end) } -> cpt::non_void;
+        };
+
+    template <typename X>
+    concept relpos_computable =
+        relpos_computable_from<X, X>;
+
+// -----------------------------------------------------------------------------
+//  [type] relpos_t
+// -----------------------------------------------------------------------------
+    template <typename X, typename Base = X>
+        requires relpos_computable_from<X, Base>
+    using relpos_t = std::remove_cvref_t<decltype(
+        interp1d::distance(std::declval<const Base&>(), std::declval<const X&>()) 
+        / interp1d::distance(std::declval<const Base&>(), std::declval<const Base&>())
+    )>;
 
 } // namespace egret::math::interp1d
 
@@ -167,4 +211,3 @@ namespace egret::cpt {
         cpt::updatable_with<F, std::size_t, const std::ranges::range_reference_t<Ys>>;
 
 } // namespace egret::cpt
-

@@ -59,4 +59,43 @@ namespace egret_detail::interp1d_impl {
         }
     }
 
+    template <typename X, typename Y, egret::cpt::basic_json Json, std::output_iterator<std::pair<X, Y>> XYIt>
+    void recover_knots(const Json& j, XYIt xyit)
+    {
+        constexpr auto j2x = "grid" >> egret::util::j2obj::get<X>;
+        constexpr auto j2y = "value" >> egret::util::j2obj::get<Y>;
+        for (const auto& knot : ("knots" >> egret::util::j2obj::array)(j)) {
+            *xyit = std::pair(j2x(knot), j2y(knot));
+            ++xyit;
+        }
+    }
+
+    template <typename X, typename Y, egret::cpt::basic_json Json>
+    auto recover_knots(const Json& j)
+        -> std::pair<std::vector<X>, std::vector<Y>>
+    {
+        const auto sz = interp1d_impl::get_knots_size(j);
+        std::vector<X> xs;
+        std::vector<Y> ys;
+        xs.reserve(sz);
+        ys.reserve(sz);
+
+        if constexpr (std::is_swappable_v<std::pair<X, Y>>) {
+            std::vector<std::pair<X, Y>> pairs;
+            pairs.reserve(sz);
+
+            interp1d_impl::recover_knots<X, Y>(j, std::back_inserter(pairs));
+            const auto less = [cmp=Less{}] (const auto& l, const auto& r) { return cmp(l.first, r.first); };
+            std::ranges::sort(pairs, less);
+            for (auto& [x, y] : pairs) {
+                xs.push_back(std::move(x));
+                ys.push_back(std::move(y));
+            }
+        }
+        else {
+            interp1d_impl::recover_knots<X, Y>(j, std::back_inserter(xs), std::back_inserter(ys));
+        }
+        return {std::move(xs), std::move(ys)};
+    }
+    
 } // namespace egret_detail::interp1d_impl

@@ -53,6 +53,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)concepts\qualified.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)concepts\range_of.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)config.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\algebra.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\algebra\concepts.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\der.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\integrate.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d.h" />
@@ -62,10 +64,13 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\interpolatee_validation.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\interval_at.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\json_deserializer_impl.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\auxiliary\relpos.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\cspline.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\linear.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\proxy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\pwconst.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\slopes\concepts.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\solver.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\solver\iteration_result.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\solver\newton1d.h" />

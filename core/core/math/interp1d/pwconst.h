@@ -3,12 +3,12 @@
 #include <ranges>
 #include <utility>
 #include "core/utils/member_data.h"
-#include "core/concepts/qualified.h"
 #include "core/concepts/range_of.h"
 #include "core/utils/range_utils/find_interval.h"
 #include "core/utils/range_utils/vector_assign.h"
 #include "core/utils/json_utils/j2obj.h"
 #include "core/type_traits/special_functions_properties.h"
+#include "core/math/algebra/concepts.h"
 
 #include "concepts.h"
 #include "auxiliary/interpolatee_validation.h"
@@ -22,12 +22,8 @@ namespace egret::math::interp1d {
 // -----------------------------------------------------------------------------
     template <
         std::ranges::forward_range Xs, std::ranges::forward_range Ys, 
-        cpt::non_reference P = double, std::semiregular Less = std::ranges::less
+        cpt::non_reference P = double, typename Less = std::ranges::less
     >
-        requires 
-            distance_measurable<std::ranges::range_reference_t<Xs>> && 
-            std::strict_weak_order<const Less&, std::ranges::range_reference_t<Xs>, std::ranges::range_reference_t<Xs>> &&
-            std::strict_weak_order<const Less&, const P&, double>
     class generic_pwconst {
     private:
         using this_type = generic_pwconst;
@@ -35,6 +31,19 @@ namespace egret::math::interp1d {
         using grid_type = std::ranges::range_value_t<const Xs>;
         using value_type = std::ranges::range_value_t<const Ys>;
         using partition_type = P;
+
+        static_assert(
+            relpos_computable<grid_type>, 
+            "Relative position must be defined for grids.");
+        static_assert(
+            std::strict_weak_order<const Less&, std::ranges::range_reference_t<const Xs>, std::ranges::range_reference_t<const Xs>>, 
+            "Less must be a comparison of grids");
+        static_assert(
+            std::strict_weak_order<const Less&, const P&, double>, 
+            "Partition point must be comparable with double.");
+        static_assert(
+            std::strict_weak_order<const Less&, const P&, relpos_t<grid_type>>, 
+            "Partition point must be comparable with relative position of grids.");
 
     public:
     // -------------------------------------------------------------------------
@@ -51,14 +60,15 @@ namespace egret::math::interp1d {
         template <
             cpt::constructible_to<util::member_data<Xs>> AXs, 
             cpt::constructible_to<util::member_data<Ys>> AYs,
-            cpt::constructible_to<P> AP
+            cpt::constructible_to<P> AP,
+            cpt::constructible_to<Less> ALess
         >
-        constexpr generic_pwconst(AXs&& xs, AYs&& ys, AP&& partition, bool is_right_continuous, Less less)
+        constexpr generic_pwconst(AXs&& xs, AYs&& ys, AP&& partition, bool is_right_continuous, ALess&& less)
             : grids_(std::forward<AXs>(xs)),
               values_(std::forward<AYs>(ys)),
               partition_(std::forward<AP>(partition)),
               is_right_continuous_(is_right_continuous),
-              less_(std::move(less))
+              less_(std::forward<ALess>(less))
         {
             egret_detail::interp1d_impl::interpolatee_validation(grids_.get(), values_.get(), less_);
             if (std::invoke(less_, partition_, 0.) || std::invoke(less_, 1., partition_)) {
@@ -77,7 +87,8 @@ namespace egret::math::interp1d {
         {
         }
 
-        this_type& operator =(const this_type&) = default;
+        this_type& operator =(const this_type&)
+            requires spfn_props::are_copy_assignable_v = default;
         this_type& operator =(this_type&&)
             noexcept(spfn_props::are_nothrow_move_assignable_v)
             requires spfn_props::are_move_assignable_v = default;
@@ -88,10 +99,10 @@ namespace egret::math::interp1d {
         constexpr const Xs& grids() const noexcept { return grids_.get(); }
         constexpr const Ys& values() const noexcept { return values_.get(); }
 
-        template <typename X>
+        template <relpos_computable_from<grid_type> X>
             requires
                 std::strict_weak_order<const Less&, const grid_type&, const X&> &&
-                std::strict_weak_order<const Less&, distance_result_t<grid_type, X>, const P&>
+                std::strict_weak_order<const Less&, relpos_t<X, grid_type>, const P&>
         constexpr auto operator()(const X& x) const
             -> std::ranges::range_reference_t<const Ys>
         {
@@ -126,34 +137,34 @@ namespace egret::math::interp1d {
         template <distance_measurable_from<grid_type> X>
             requires 
                 std::strict_weak_order<const Less&, const grid_type&, const X&> &&
-                std::strict_weak_order<const Less&, distance_result_t<grid_type, X>, const P&> &&
-                std::constructible_from<X, std::ranges::range_reference_t<const Xs>>
+                std::strict_weak_order<const Less&, distance_result_t<X, grid_type>, const P&> &&
+                std::constructible_from<X, std::ranges::range_reference_t<const Xs>> &&
+                cpt::module<std::common_type_t<distance_result_t<X, grid_type>, value_type>, distance_result_t<X, grid_type>>
         constexpr auto integrate(const X& from, const X& to) const
-            -> std::common_type_t<distance_result_t<X>, std::ranges::range_value_t<Ys>>
+            -> std::common_type_t<distance_result_t<X, grid_type>, value_type>
         {
-            using result_t = std::common_type_t<distance_result_t<X>, std::ranges::range_value_t<Ys>>;
+            using result_t = std::common_type_t<distance_result_t<X, grid_type>, value_type>;
 
             struct partial_integrator_t {
                 constexpr result_t operator()() const
                 {
-                    auto average = (**ylit * *partition + **yrit * (1 - *partition));
+                    auto average = static_cast<result_t>(**ylit * *partition + **yrit * (1 - *partition));
                     auto dist = interp1d::distance(static_cast<X>(**xlit), static_cast<X>(**xrit));
-                    return static_cast<result_t>(std::move(dist) * std::move(average));
+                    return std::move(dist) * std::move(average);
                 }
                 constexpr result_t operator()(const X& f, const X& t) const
                 {
                     const auto interval_dist = interp1d::distance(**xlit, **xrit);
                     if (auto wf = interp1d::distance(**xlit, f) / interval_dist; (*less)(*partition, wf)) {
-                        return static_cast<result_t>(**yrit * interp1d::distance(f, t));
+                        return **yrit * interp1d::distance(f, t);
                     }
                     if (auto wt = interp1d::distance(**xlit, t) / interval_dist; (*less)(wt, *partition)) {
-                        return static_cast<result_t>(**ylit * interp1d::distance(f, t));
+                        return **ylit * interp1d::distance(f, t);
                     }
                     const auto partition_dist = *partition * interval_dist;
-                    return static_cast<result_t>(
-                        static_cast<result_t>(**yrit * (interp1d::distance(**xlit, t) - partition_dist)) +
-                        static_cast<result_t>(**ylit * (partition_dist - interp1d::distance(**xlit, f)))
-                    );
+                    return
+                        (**yrit * (interp1d::distance(static_cast<X>(**xlit), t) - partition_dist)) +
+                        (**ylit * (partition_dist - interp1d::distance(static_cast<X>(**xlit), f)));
                 }
 
                 const std::ranges::iterator_t<const Xs>* xlit;
@@ -314,14 +325,6 @@ namespace egret::math::interp1d {
             super_type::values_[i] = std::forward<AY>(value);
         }
 
-    // -------------------------------------------------------------------------
-    //  as_immutable
-    //
-        super_type& as_immutable() & noexcept { return static_cast<super_type&>(*this); }
-        const super_type& as_immutable() const & noexcept { return static_cast<const super_type&>(*this); }
-        super_type&& as_immutable() && noexcept { return static_cast<super_type&&>(*this); }
-        const super_type&& as_immutable() const && noexcept { return static_cast<const super_type&&>(*this); }
-
     }; // class pwconst
 
     template <std::ranges::forward_range Xs, std::ranges::forward_range Ys, typename P>
@@ -346,16 +349,11 @@ namespace nlohmann {
         template <typename Json>
         static target_type from_json(const Json& j)
         {
+            namespace impl = egret_detail::interp1d_impl;
             namespace j2obj = egret::util::j2obj;
             const bool is_right_continuous = ("is_right_continuous" >> j2obj::boolean)(j);
             auto partition_ratio = ("partition_ratio" >> j2obj::get<P>)(j);
-            const auto sz = egret_detail::interp1d_impl::get_knots_size(j);
-            std::vector<X> xs;
-            std::vector<Y> ys;
-            xs.reserve(sz);
-            ys.reserve(sz);
-
-            egret_detail::interp1d_impl::recover_knots<X, Y>(j, std::back_inserter(xs), std::back_inserter(ys));
+            auto [xs, ys] = impl::recover_knots<X, Y>(j);
             return target_type{std::move(xs), std::move(ys), std::move(partition_ratio), is_right_continuous};
         }
 
@@ -394,7 +392,7 @@ namespace nlohmann {
         static target_type from_json(const Json& j)
         {
             using super_type = adl_serializer<egret::math::interp1d::pwconst<X, Y, P, Less>>;
-            return target_type(super_type::from_json(j).as_immutable());
+            return target_type(static_cast<super_type&&>(super_type::from_json(j)));
         }
         template <typename Json>
         static void to_json(Json& j, const target_type& obj)

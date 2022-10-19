@@ -30,12 +30,12 @@ int main()
             "partition_ratio": 0.9,
             "knots": [
                 {
-                    "grid": "2022-09-01",
-                    "value": 0
-                },
-                {
                     "grid": "2022-09-11",
                     "value": 1
+                },
+                {
+                    "grid": "2022-09-01",
+                    "value": 0
                 },
                 {
                     "grid": "2022-09-21",
@@ -44,12 +44,12 @@ int main()
             ]
         })");
         using namespace std::chrono_literals;
-        const auto obj = j.get<egret::math::interp1d::pwconst<std::chrono::sys_days, double>>();
+        const auto obj = j.get<egret::math::interp1d::linear<std::chrono::sys_days, double>>();
         const auto ymd = 2022y/9/1;
         const auto yy = obj.integrate(std::chrono::sys_days(ymd) + std::chrono::days(100), std::chrono::sys_days(ymd));
         std::cout << yy << std::endl;
         auto jj = nlohmann::json();
-        jj = obj.as_immutable();
+        jj = obj;
 
         std::cout << jj.dump(4) << std::endl;
 

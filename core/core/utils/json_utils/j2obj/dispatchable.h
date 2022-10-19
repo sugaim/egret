@@ -8,6 +8,19 @@
 #include "interface.h"
 #include "json_deserializer.h"
 
+namespace egret_detail::j2obj_impl {
+    template <typename Dispatcher, typename Json>
+    using dispatcher_result_t = std::remove_cvref_t<std::invoke_result_t<const Dispatcher&, const Json&>>;
+
+    template <typename Target, typename Json, typename Dispatcher, typename Less>
+    using deserializer_map_t = std::map<
+        dispatcher_result_t<Dispatcher, Json>,
+        egret::util::j2obj::json_deserializer<Target, Json>,
+        Less
+    >;
+
+} // namespace egret_detail::j2obj_impl;
+
 namespace egret::util::j2obj {
 // -----------------------------------------------------------------------------
 //  [class] dispatchable_deserializer
@@ -81,5 +94,24 @@ namespace egret::util::j2obj {
         map_type map_;
 
     }; // class dispatchable_deserializer
+
+// -----------------------------------------------------------------------------
+//  [fn] make_dispatchable
+// -----------------------------------------------------------------------------
+    template <
+        typename Target, cpt::basic_json Json = nlohmann::json, 
+        typename Dispatcher, typename Less = std::less<>
+    >
+        requires requires (const Json& j, const Dispatcher& d) {
+            { d(j) } -> cpt::non_void;
+        }
+    auto make_dispatchable(
+        Dispatcher&& dispatcher,
+        egret_detail::j2obj_impl::deserializer_map_t<Target, Json, Dispatcher, Less> map
+    ) -> dispatchable_deserializer<Target, Json, std::remove_cvref_t<Dispatcher>, Less>
+    {
+        using result_t = dispatchable_deserializer<Target, Json, std::remove_cvref_t<Dispatcher>, Less>;
+        return result_t{std::forward<Dispatcher>(dispatcher), std::move(map)};
+    }
 
 } // namespace egret::util::j2obj
