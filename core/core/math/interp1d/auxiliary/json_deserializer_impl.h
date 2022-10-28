@@ -85,7 +85,7 @@ namespace egret_detail::interp1d_impl {
             pairs.reserve(sz);
 
             interp1d_impl::recover_knots<X, Y>(j, std::back_inserter(pairs));
-            const auto less = [cmp=Less{}] (const auto& l, const auto& r) { return cmp(l.first, r.first); };
+            const auto less = [cmp=std::less<>{}] (const auto& l, const auto& r) { return cmp(l.first, r.first); };
             std::ranges::sort(pairs, less);
             for (auto& [x, y] : pairs) {
                 xs.push_back(std::move(x));

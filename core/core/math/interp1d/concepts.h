@@ -46,16 +46,21 @@ namespace egret_detail::interp1d_impl {
     public:
         template <typename F>
             requires 
-                requires (const F& f) { { f.grids() } -> std::ranges::forward_range; } ||
+                requires (const F& f) { { f.grids() } -> std::ranges::forward_range; }
+        constexpr decltype(auto) operator()(const F& f) const
+            noexcept(noexcept(f.grids()))
+        {
+            return f.grids();
+        }
+
+        template <typename F>
+            requires 
+                (!requires (const F& f) { { f.grids() } -> std::ranges::forward_range; }) &&
                 requires (const F & f) { { grids(f) } -> std::ranges::forward_range; }
         constexpr decltype(auto) operator()(const F& f) const
+            noexcept(noexcept(grids(f)))
         {
-            if constexpr (requires (const F& f) { { f.grids() } -> std::ranges::forward_range; }) {
-                return f.grids();
-            }
-            else {
-                return grids(f);
-            }
+            return grids(f);
         }
 
     }; // class grids_t
@@ -66,17 +71,23 @@ namespace egret_detail::interp1d_impl {
     public:
         template <typename F>
             requires 
-                requires (const F& f) { { f.values() } -> std::ranges::forward_range; } ||
+                requires (const F& f) { { f.values() } -> std::ranges::forward_range; }
+        constexpr decltype(auto) operator()(const F& f) const
+            noexcept(noexcept(f.values()))
+        {
+            return f.values();
+        }
+
+        template <typename F>
+            requires 
+                (!requires (const F& f) { { f.values() } -> std::ranges::forward_range; }) &&
                 requires (const F& f) { { values(f) } -> std::ranges::forward_range; }
         constexpr decltype(auto) operator()(const F& f) const
+            noexcept(noexcept(values(f)))
         {
-            if constexpr (requires (const F& f) { { f.values() } -> std::ranges::forward_range; }) {
-                return f.values();
-            }
-            else {
-                return values(f);
-            }
+            return values(f);
         }
+        
     }; // class values_t
 
     void distance(auto&&, auto&&) = delete;
@@ -128,6 +139,18 @@ namespace egret::math::interp1d::inline cpo {
 
 
 namespace egret::math::interp1d {
+// -----------------------------------------------------------------------------
+//  [type] grids_t
+//  [type] values_t
+// -----------------------------------------------------------------------------
+    template <typename F>
+        requires requires (const F& f) { cpo::grids(f); }
+    using grids_t = decltype(cpo::grids(std::declval<const F&>()));
+
+    template <typename F>
+        requires requires (const F& f) { cpo::values(f); }
+    using values_t = decltype(cpo::values(std::declval<const F&>()));
+
 // -----------------------------------------------------------------------------
 //  [concept] distance_measurable_from
 //  [concept] distance_measurable

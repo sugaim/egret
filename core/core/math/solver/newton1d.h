@@ -43,9 +43,9 @@ namespace egret::math::solver {
             std::size_t i = 0;
             for (; i != max_iter; ++i) {
                 const std::pair<X, X> valuation_result = std::invoke(f, x);
-                const auto [fval, dval] = valuation_result;
+                const auto& [fval, dval] = valuation_result;
                 result.push(i, {.x = x, .f = fval, .der = dval});
-                const X new_x = x - fval / dval;
+                X new_x = x - fval / dval;
                 if (!std::isfinite(new_x)) {
                     throw exception("Some invalid computation is detected. [iter={}, f={}, f'={}]", i, fval, dval);
                 }
@@ -55,7 +55,7 @@ namespace egret::math::solver {
                     result.push(i + 1, {.x = new_x, .f = final_value.first, .der = final_value.second});
                     break;
                 }
-                x = new_x;
+                x = std::move(new_x);
             }
             if (i == max_iter) {
                 throw exception("newton_raphson1d does not converged.");

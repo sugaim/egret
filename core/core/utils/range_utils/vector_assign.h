@@ -13,13 +13,14 @@ namespace egret::util {
             target = std::move(rng);
             return;
         }
-
-        target.clear();
-        if constexpr (std::ranges::sized_range<Rng>) {
-            target.reserve(std::ranges::size(rng));
-        }
-        for (const auto& elem : rng) {
-            target.push_back(elem);
+        else {
+            target.clear();
+            if constexpr (std::ranges::sized_range<Rng>) {
+                target.reserve(std::ranges::size(rng));
+            }
+            for (const auto& elem : rng) {
+                target.push_back(elem);
+            }
         }
     }
     

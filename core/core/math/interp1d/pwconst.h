@@ -295,7 +295,7 @@ namespace egret::math::interp1d {
             std::predicate<const Less&, const X&, const X&> &&
             std::predicate<const Less&, const P&, double> &&
             std::predicate<const Less&, double, const P&>
-    class pwconst : public generic_pwconst<std::vector<X>, std::vector<Y>, P, Less> {
+    class pwconst final : public generic_pwconst<std::vector<X>, std::vector<Y>, P, Less> {
     private:
         using super_type = generic_pwconst<std::vector<X>, std::vector<Y>, P, Less>;
 

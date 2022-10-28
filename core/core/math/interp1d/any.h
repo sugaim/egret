@@ -25,6 +25,8 @@ namespace egret::math::interp1d {
     private:
         using this_type = any;
 
+        template <std::ranges::forward_range Xs, std::ranges::forward_range Ys> friend class any_mutable;
+
         struct base {
             virtual ~base() = default;
             virtual Y call(const X& x) const = 0;
@@ -37,17 +39,41 @@ namespace egret::math::interp1d {
             virtual std::optional<Y> integrate(const X& from, const X& to) const = 0;
         };
 
+        template <typename C, typename T, bool for_grid>
+        struct vector_provider {
+            const std::vector<T>& get(const C&) const noexcept { return vector_; }
+            template <typename Rng> void assign_if_non_member(Rng&& rng) { util::vector_assign(vector_, std::forward<Rng>(rng)); }
+            template <typename U> void update(std::size_t i, U&& value) { vector_[i] = std::forward<U>(value); }
+            std::vector<T> vector_;
+        };
+
+        template <typename C>
+            requires requires (const C& obj) { {interp1d::grids(obj)} noexcept -> std::convertible_to<const std::vector<X>&>; }
+        struct vector_provider<C, X, true> {
+            const std::vector<X>& get(const C& obj) const noexcept { return interp1d::grids(obj); }
+            template <typename Rng> void assign_if_non_member(Rng&&) noexcept {}
+            template <typename U> void update(std::size_t, U&&) noexcept {}
+        };
+
+        template <typename C>
+            requires requires (const C& obj) { {interp1d::values(obj)} noexcept -> std::convertible_to<const std::vector<Y>&>; }
+        struct vector_provider<C, Y, false> {
+            const std::vector<Y>& get(const C& obj) const noexcept { return interp1d::values(obj); }
+            template <typename Rng> void assign_if_non_member(Rng&&) noexcept {}
+            template <typename U> void update(std::size_t, U&&) noexcept {}
+        };
+
         template <typename C>
         struct concrete final : base {
             concrete(C obj) 
-                : obj_(std::move(obj)), grids_(), values_()
+                : obj_(std::move(obj)), grids_provider_(), values_provider_()
             {
-                util::vector_assign(grids_, interp1d::grids(obj_));
-                util::vector_assign(values_, interp1d::values(obj_));
+                grids_provider_.assign_if_non_member(interp1d::grids(obj_));
+                values_provider_.assign_if_non_member(interp1d::values(obj_));
             }
-            Y call(const X& x) const override { return obj(x); }
-            const std::vector<X>& grids() const noexcept override { return grids_; }
-            const std::vector<Y>& values() const noexcept override { return values_;}
+            Y call(const X& x) const override { return obj_(x); }
+            const std::vector<X>& grids() const noexcept override { return grids_provider_.get(obj_); }
+            const std::vector<Y>& values() const noexcept override { return values_provider_.get(obj_);}
             std::type_index type() const noexcept override { return typeid(C); }
             const void* ptr() const noexcept override { return std::addressof(obj_); }
             std::optional<Y> der1(const X& arg) const override
@@ -79,15 +105,18 @@ namespace egret::math::interp1d {
             }
 
             C obj_;
-            std::vector<X> grids_;
-            std::vector<Y> values_;
+            vector_provider<C, X, true> grids_provider_;
+            vector_provider<C, Y, false> values_provider_;
         };
 
     public:
     // -------------------------------------------------------------------------
     //  ctors, dtors and assigns
     //
-        any() = delete;
+    private:
+        any() noexcept = default;
+
+    public:
         any(const this_type&) noexcept = default;
         any(this_type&&) noexcept = default;
 
@@ -144,90 +173,75 @@ namespace egret::math::interp1d {
         }
 
     private:
-        std::shared_ptr<const base> obj_;
+        std::shared_ptr<base> obj_;
 
     }; // class any
+
+    template <typename F>
+    any(F) -> any<std::ranges::range_value_t<grids_t<F>>, std::ranges::range_value_t<values_t<F>>>;
 
 // -----------------------------------------------------------------------------
 //  [class] any_mutable
 // -----------------------------------------------------------------------------
     template <std::ranges::forward_range Xs, std::ranges::forward_range Ys>
-    class any_mutable {
+    class any_mutable final : public any<std::ranges::range_value_t<Xs>, std::ranges::range_value_t<Ys>> {
     private:
         using this_type = any_mutable;
         using grid_type = std::ranges::range_value_t<Xs>;
         using value_type = std::ranges::range_value_t<Ys>;
+        using super_type = any<grid_type, value_type>;
 
-        struct base {
-            virtual ~base() = default;
-            virtual std::shared_ptr<base> clone() const = 0;
-            virtual value_type call(const grid_type& x) const = 0;
-            virtual const std::vector<grid_type>& grids() const noexcept = 0;
-            virtual const std::vector<value_type>& values() const noexcept = 0;
+        struct mutable_base : super_type::base {
+            virtual std::shared_ptr<mutable_base> clone() const = 0;
             virtual void initialize(const Xs& grids, const Ys& values) = 0;
             virtual void initialize(Xs&& grids, const Ys& values) = 0;
             virtual void initialize(const Xs& grids, Ys&& values) = 0;
             virtual void initialize(Xs&& grids, Ys&& values) = 0;
             virtual void update(std::size_t i, const value_type& value) = 0;
-            virtual std::type_index type() const noexcept = 0;
-            virtual const void* ptr() const noexcept = 0;
-            virtual std::optional<value_type> der1(const grid_type& arg) const = 0;
-            virtual std::optional<value_type> der2(const grid_type& arg) const = 0;
         };
 
         template <typename C>
-        struct concrete final : base {
-            concrete(C obj) : obj_(std::move(obj)), grids_(), values_() 
-            { 
-                this->set_vectors(); 
-            }
-            std::shared_ptr<base> clone() const override { return std::make_shared<concrete>(obj_); }
-            value_type call(const grid_type& x) const override { return obj(x); }
-            const std::vector<grid_type>& grids() const noexcept override { return grids_; }
-            const std::vector<value_type>& values() const noexcept override { return values_;}
-            void initialize(const Xs& grids, const Ys& values) override { util::initialize_with(obj_, grids, values); this->set_vectors(); }
-            void initialize(Xs&& grids, const Ys& values) override { util::initialize_with(obj_, std::move(grids), values); this->set_vectors(); }
-            void initialize(const Xs& grids, Ys&& values) override { util::initialize_with(obj_, grids, std::move(values)); this->set_vectors(); }
-            void initialize(Xs&& grids, Ys&& values) override { util::initialize_with(obj_, std::move(grids), std::move(values)); this->set_vectors(); }
+        struct mutable_concrete final : mutable_base {
+            using internal_type = super_type::template concrete<C>;
+            mutable_concrete(C obj) : obj_(std::move(obj)) {}
+
+            value_type call(const grid_type& x) const override { return obj_.call(x); }
+            const std::vector<grid_type>& grids() const noexcept override { return obj_.grids(); }
+            const std::vector<value_type>& values() const noexcept override { return obj_.values();}
+            std::type_index type() const noexcept override { return obj_.type(); }
+            const void* ptr() const noexcept override { return obj_.ptr(); }
+            std::optional<value_type> der1(const grid_type& arg) const override { return obj_.der1(arg); }
+            std::optional<value_type> der2(const grid_type& arg) const override { return obj_.der2(arg); }
+            std::optional<value_type> integrate(const grid_type& from, const grid_type& to) const override { return obj_.integrate(from, to); }
+
+            std::shared_ptr<mutable_base> clone() const override { return std::make_shared<mutable_concrete>(obj_.obj_); }
+            void initialize(const Xs& grids, const Ys& values) override { util::initialize_with(obj_.obj_, grids, values); this->set_vectors(); }
+            void initialize(Xs&& grids, const Ys& values) override { util::initialize_with(obj_.obj_, std::move(grids), values); this->set_vectors(); }
+            void initialize(const Xs& grids, Ys&& values) override { util::initialize_with(obj_.obj_, grids, std::move(values)); this->set_vectors(); }
+            void initialize(Xs&& grids, Ys&& values) override { util::initialize_with(obj_.obj_, std::move(grids), std::move(values)); this->set_vectors(); }
             void update(std::size_t i, const value_type& value) override
             {
-                if (values_.size() <= i) {
-                    throw exception("Updated out of range value. [size={}, tried={}]", values_.size(), i);
+                if (this->values().size() <= i) {
+                    throw exception("Updated out of range value. [size={}, tried={}]", this->values().size(), i);
                 }
-                util::update_with(obj_, i, value);
-                values_[i] = value;
-            }
-            std::type_index type() const noexcept override { return typeid(C); }
-            const void* ptr() const noexcept override { return std::addressof(obj_); }
-            std::optional<value_type> der1(const grid_type& arg) const override
-            {
-                if constexpr (cpt::fst_ord_differentiable_r<C, value_type, grid_type>) {
-                    return std::nullopt;
-                }
-                else {
-                    return math::der1(obj_, arg);
-                }
-            }
-            std::optional<value_type> der2(const grid_type& arg) const override
-            {
-                if constexpr (cpt::snd_ord_differentiable_r<C, value_type, grid_type>) {
-                    return std::nullopt;
-                }
-                else {
-                    return math::der2(obj_, arg);
-                }
+                util::update_with(obj_.obj_, i, value);
+                obj_.values_provider_.update(i, value);
             }
 
             void set_vectors()
             {
-                util::vector_assign(grids_, interp1d::grids(obj_));
-                util::vector_assign(values_, interp1d::values(obj_));
+                obj_.grids_provider_.assign_if_non_member(interp1d::grids(obj_.obj_));
+                obj_.values_provider_.assign_if_non_member(interp1d::values(obj_.obj_));
             }
 
-            C obj_;
-            std::vector<grid_type> grids_;
-            std::vector<value_type> values_;
+            internal_type obj_;
         };
+
+        void internal_clone_for_write()
+        {
+            const mutable_base* ptr = static_cast<const mutable_base*>(super_type::obj_.get());
+            super_type::obj_ = ptr->clone();
+        }
 
     public:
     // -------------------------------------------------------------------------
@@ -240,8 +254,9 @@ namespace egret::math::interp1d {
         template <cpt::mutable_interpolation1d<Xs, Ys> F>
             requires cpt::different_from<F, this_type>
         explicit any_mutable(F&& f)
-            : obj_(std::make_shared<concrete<std::remove_cvref_t<F>>>(std::forward<F>(f)))
+            : super_type()
         {
+            super_type::obj_ = std::make_shared<mutable_concrete<std::remove_cvref_t<F>>>(std::forward<F>(f));
         }
 
         this_type& operator =(const this_type&) noexcept = default;
@@ -250,44 +265,33 @@ namespace egret::math::interp1d {
     // -------------------------------------------------------------------------
     //  mutable interpolation behavior
     //
-        value_type operator()(const grid_type& x) const { return obj_->call(x); }
-        const std::vector<grid_type>& grids() const noexcept { return obj_->grids(); }
-        const std::vector<value_type>& values() const noexcept { return obj_->values(); }
-
         void update(std::size_t i, const value_type& value)
         {
-            // copy on write
-            std::shared_ptr<base> copied = obj_->clone();
-            copied->update(i, value);
-            obj_.swap(copied);
+            if (1 < super_type::obj_.use_count()) {
+                // copy on write
+                this->internal_clone_for_write();
+            }
+            mutable_base* ptr = static_cast<mutable_base*>(super_type::obj_.get());
+            ptr->update(i, value);
         }
 
         template <cpt::qualified<Xs> AXs, cpt::qualified<Ys> AYs>
         void initialize(AXs&& xs, AYs&& ys)
         {
-            // copy on write
-            std::shared_ptr<base> copied = obj_->clone();
-            copied->initialize(std::forward<AXs>(xs), std::forward<AYs>(ys));
-            obj_.swap(copied);            
+            if (1 < super_type::obj_.use_count()) {
+                // copy on write
+                this->internal_clone_for_write();
+            }
+            mutable_base* ptr = static_cast<mutable_base*>(super_type::obj_.get());
+            ptr->initialize(std::forward<AXs>(xs), std::forward<AYs>(ys));
         }
     
-    // -------------------------------------------------------------------------
-    //  type_erasure behavior
-    //
-        std::type_index type() const noexcept { return obj_->type(); }
-
-        template <cpt::mutable_interpolation1d<Xs, Ys> C>
-        util::maybe<const C&> as() const noexcept
-        {
-            const auto type = this->type();
-            return type == typeid(C) 
-                ? util::maybe<const C&>(*reinterpret_cast<const C*>(obj_->ptr()))
-                : util::maybe<const C&>();
-        }
-
-    private:
-        std::shared_ptr<base> obj_;
-
     }; // class any_mutable
+
+    template <typename F>
+    any_mutable(F) -> any_mutable<
+        std::vector<std::ranges::range_value_t<grids_t<F>>>, 
+        std::vector<std::ranges::range_value_t<values_t<F>>>
+    >;
 
 } // namespace egret::math::interp1d

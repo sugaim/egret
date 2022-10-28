@@ -13,7 +13,7 @@ namespace egret_detail::interp1d_impl {
         constexpr auto between(const U& from, const U& to) const
             -> egret::math::interp1d::relpos_t<T, U>
         {
-            return egret::math::interp1d::distance(from, point.get())
+            return egret::math::interp1d::distance(from, *point)
                 / egret::math::interp1d::distance(from, to);
         }
 
@@ -27,7 +27,7 @@ namespace egret_detail::interp1d_impl {
         requires std::is_lvalue_reference_v<T>
     constexpr relpos_helper<std::remove_cvref_t<T>> relpos(T&& p) 
     {
-        relpos_helper<T> result;
+        relpos_helper<std::remove_cvref_t<T>> result;
         result.point = std::addressof(p);
         return result;
     }

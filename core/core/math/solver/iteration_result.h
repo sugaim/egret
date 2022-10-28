@@ -28,7 +28,7 @@ namespace egret::math::solver {
     // -------------------------------------------------------------------------
     //  set
     //
-        void set_error(exception exp) noexcept { result_ = std::expected<X, exception>(std::unexpect, exp); }
+        void set_error(exception exp) noexcept { result_ = std::expected<X, exception>(std::unexpect, std::move(exp)); }
         void set_result(X value) { result_.emplace(std::move(value)); }
         void push(std::size_t i, LogValue value) { log_.emplace_back(i, std::move(value)); }
 

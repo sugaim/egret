@@ -118,7 +118,7 @@ namespace egret::cpt {
     template <typename T, typename C>
     concept strict_module =
         module<T, C> &&
-        strict_module<T, C> &&
+        strict_additive_group<T> &&
         strict_ring<C> &&
         requires (const C& c, const T& x, int n) {
             {x * n} -> cpt::qualified<T>;

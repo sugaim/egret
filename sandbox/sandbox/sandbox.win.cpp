@@ -16,6 +16,7 @@
 #include "egret/markets/daycounters/daycounter.h"
 #include "egret/instruments/cashflows/float_rate_cf.h"
 #include "egret/instruments/cashflows/ois_coupon_cf.h"
+#include "core/math/interp1d/any.h"
 
 struct hogehoge {
     int x;
@@ -45,8 +46,11 @@ int main()
         })");
         using namespace std::chrono_literals;
         const auto obj = j.get<egret::math::interp1d::linear<std::chrono::sys_days, double>>();
+        auto any = egret::math::interp1d::any_mutable(obj);
+        any.update(1, 3.5);
+
         const auto ymd = 2022y/9/1;
-        const auto yy = obj.integrate(std::chrono::sys_days(ymd) + std::chrono::days(100), std::chrono::sys_days(ymd));
+        const auto yy = any.integrate(std::chrono::sys_days(ymd) + std::chrono::days(100), std::chrono::sys_days(ymd));
         std::cout << yy << std::endl;
         auto jj = nlohmann::json();
         jj = obj;

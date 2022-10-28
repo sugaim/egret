@@ -100,7 +100,7 @@ namespace egret::math::interp1d {
             namespace impl = egret_detail::interp1d_impl;
             const auto [idx, wr] = impl::find_index_and_relpos(grids_.get(), x, less_);
             const auto [ylit, yrit] = impl::interval_at(idx, values_.get());
-            return *ylit(1 - wr) + *yrit * wr;
+            return *ylit * (1 - wr) + *yrit * wr;
         }
 
     // -------------------------------------------------------------------------
@@ -266,7 +266,7 @@ namespace egret::math::interp1d {
 // -----------------------------------------------------------------------------
     template <distance_measurable X, distance_measurable Y, std::semiregular Less = std::ranges::less>
         requires std::predicate<const Less&, const X&, const X&>
-    class linear : public generic_linear<std::vector<X>, std::vector<Y>, Less> {
+    class linear final : public generic_linear<std::vector<X>, std::vector<Y>, Less> {
     private:
         using super_type = generic_linear<std::vector<X>, std::vector<Y>, Less>;
 
@@ -284,16 +284,16 @@ namespace egret::math::interp1d {
         void initialize(Xs&& xs, Ys&& ys)
         {
             egret_detail::interp1d_impl::interpolatee_validation(xs, ys, super_type::less_);
-            util::vector_assign(super_type::grids_, std::forward<Xs>(xs));
-            util::vector_assign(super_type::values_, std::forward<Ys>(ys));
+            util::vector_assign(super_type::grids_.get(), std::forward<Xs>(xs));
+            util::vector_assign(super_type::values_.get(), std::forward<Ys>(ys));
         }
 
         template <typename AY>
             requires std::is_assignable_v<Y&, AY>
         void update(std::size_t i, AY&& value)
         {
-            egret::assertion(super_type::values_.size() < i, "Assigned to out of range element. [size={}, index={}]", super_type::values_.size(), i);
-            super_type::values_[i] = std::forward<AY>(value);
+            egret::assertion(i < super_type::values_.get().size(), "Assigned to out of range element. [size={}, index={}]", super_type::values_.get().size(), i);
+            super_type::values_.get()[i] = std::forward<AY>(value);
         }
 
     }; // class linear
