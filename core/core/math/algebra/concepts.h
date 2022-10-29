@@ -22,7 +22,7 @@ namespace egret::cpt {
         subtractible_from<U, T>;
 
     template <typename T>
-    concept subtractibleh = 
+    concept subtractible = 
         subtractible_with<T, T>;
 
 // -----------------------------------------------------------------------------

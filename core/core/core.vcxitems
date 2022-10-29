@@ -70,7 +70,11 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\linear.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\proxy.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\pwconst.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\slopes\any_slope_generator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\slopes\backward_difference.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\slopes\central_difference.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\slopes\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)math\interp1d\slopes\forward_difference.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\solver.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\solver\iteration_result.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)math\solver\newton1d.h" />

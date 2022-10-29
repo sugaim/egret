@@ -77,9 +77,9 @@ namespace egret::math::interp1d {
         {
         }
 
-        this_type& operator =(const this_type&)
+        constexpr this_type& operator =(const this_type&)
             requires spfn_props::are_copy_assignable_v = default;
-        this_type& operator =(this_type&&)
+        constexpr this_type& operator =(this_type&&)
             noexcept(spfn_props::are_nothrow_move_assignable_v)
             requires spfn_props::are_move_assignable_v = default;
 
@@ -100,7 +100,9 @@ namespace egret::math::interp1d {
             namespace impl = egret_detail::interp1d_impl;
             const auto [idx, wr] = impl::find_index_and_relpos(grids_.get(), x, less_);
             const auto [ylit, yrit] = impl::interval_at(idx, values_.get());
-            return *ylit * (1 - wr) + *yrit * wr;
+            return static_cast<std::common_type_t<relpos_t<X, grid_type>, value_type>>(
+                *ylit * (1 - wr) + *yrit * wr
+            );
         }
 
     // -------------------------------------------------------------------------
@@ -264,7 +266,7 @@ namespace egret::math::interp1d {
 // -----------------------------------------------------------------------------
 //  [class] linear
 // -----------------------------------------------------------------------------
-    template <distance_measurable X, distance_measurable Y, std::semiregular Less = std::ranges::less>
+    template <distance_measurable X, distance_measurable Y, typename Less = std::ranges::less>
         requires std::predicate<const Less&, const X&, const X&>
     class linear final : public generic_linear<std::vector<X>, std::vector<Y>, Less> {
     private:

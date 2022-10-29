@@ -87,9 +87,9 @@ namespace egret::math::interp1d {
         {
         }
 
-        this_type& operator =(const this_type&)
+        constexpr this_type& operator =(const this_type&)
             requires spfn_props::are_copy_assignable_v = default;
-        this_type& operator =(this_type&&)
+        constexpr this_type& operator =(this_type&&)
             noexcept(spfn_props::are_nothrow_move_assignable_v)
             requires spfn_props::are_move_assignable_v = default;
 

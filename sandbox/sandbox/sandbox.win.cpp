@@ -17,6 +17,7 @@
 #include "egret/instruments/cashflows/float_rate_cf.h"
 #include "egret/instruments/cashflows/ois_coupon_cf.h"
 #include "core/math/interp1d/any.h"
+#include "core/math/interp1d.h"
 
 struct hogehoge {
     int x;
@@ -36,26 +37,33 @@ int main()
                 },
                 {
                     "grid": "2022-09-01",
-                    "value": 0
+                    "value": 2
                 },
                 {
                     "grid": "2022-09-21",
-                    "value": 1
+                    "value": 2
                 }
             ]
         })");
         using namespace std::chrono_literals;
         const auto obj = j.get<egret::math::interp1d::linear<std::chrono::sys_days, double>>();
         auto any = egret::math::interp1d::any_mutable(obj);
-        any.update(1, 3.5);
-        std::cout << any.is_1st_ord_differentiable() << std::endl;
-        const auto ymd = 2022y/9/1;
-        const auto yy = any.integrate(std::chrono::sys_days(ymd) + std::chrono::days(100), std::chrono::sys_days(ymd));
+        //std::cout << any.is_1st_ord_differentiable() << std::endl;
+        const auto ymd = 2022y/9/5;
+        const auto yy = any.integrate(std::chrono::sys_days(ymd), std::chrono::sys_days(ymd) + std::chrono::days(15));
         std::cout << yy << std::endl;
-        auto jj = nlohmann::json();
-        jj = obj;
+        //auto jj = nlohmann::json();
+        //jj = obj;
 
-        std::cout << jj.dump(4) << std::endl;
+        //std::cout << jj.dump(4) << std::endl;
+
+        const auto f = egret::math::interp1d::cspline(
+            obj.grids(),
+            obj.values(),
+            egret::math::interp1d::forward_difference()
+        );
+
+        std::cout << f.integrate(std::chrono::sys_days(ymd), std::chrono::sys_days(ymd) + std::chrono::days(15)) << std::endl;
 
         //const auto j = nlohmann::json::parse(R"({
         //    "rate_tag": "hogehoge",
