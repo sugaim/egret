@@ -27,6 +27,12 @@ namespace egret::math::interp1d {
 
         template <std::ranges::forward_range Xs, std::ranges::forward_range Ys> friend class any_mutable;
 
+        struct extra_abilities {
+            bool is_1st_ord_differentiable;
+            bool is_2nd_ord_differentiable;
+            bool is_integrable;
+        };
+
         struct base {
             virtual ~base() = default;
             virtual Y call(const X& x) const = 0;
@@ -37,6 +43,7 @@ namespace egret::math::interp1d {
             virtual std::optional<Y> der1(const X& arg) const = 0;
             virtual std::optional<Y> der2(const X& arg) const = 0;
             virtual std::optional<Y> integrate(const X& from, const X& to) const = 0;
+            virtual const extra_abilities& abilities() const noexcept = 0;
         };
 
         template <typename C, typename T, bool for_grid>
@@ -103,6 +110,15 @@ namespace egret::math::interp1d {
                     return std::nullopt;
                 }
             }
+            const extra_abilities& abilities() const noexcept override
+            {
+                static constexpr auto result = extra_abilities{
+                    .is_1st_ord_differentiable = cpt::fst_ord_differentiable_r<C, Y, X>,
+                    .is_2nd_ord_differentiable = cpt::snd_ord_differentiable_r<C, Y, X>,
+                    .is_integrable = cpt::integrable_r<C, Y, X>,
+                };
+                return result;
+            }
 
             C obj_;
             vector_provider<C, X, true> grids_provider_;
@@ -140,6 +156,10 @@ namespace egret::math::interp1d {
     // -------------------------------------------------------------------------
     //  der, integrate
     //
+        bool is_1st_ord_differentiable() const noexcept { return obj_->abilities().is_1st_ord_differentiable; }
+        bool is_2nd_ord_differentiable() const noexcept { return obj_->abilities().is_2nd_ord_differentiable; }
+        bool is_integrable() const noexcept { return obj_->abilities().is_integrable; }
+
         Y der1(const X& x) const
         {
             auto result = obj_->der1(x);
@@ -213,6 +233,7 @@ namespace egret::math::interp1d {
             std::optional<value_type> der1(const grid_type& arg) const override { return obj_.der1(arg); }
             std::optional<value_type> der2(const grid_type& arg) const override { return obj_.der2(arg); }
             std::optional<value_type> integrate(const grid_type& from, const grid_type& to) const override { return obj_.integrate(from, to); }
+            const typename super_type::extra_abilities& abilities() const noexcept override { return obj_.abilities(); }
 
             std::shared_ptr<mutable_base> clone() const override { return std::make_shared<mutable_concrete>(obj_.obj_); }
             void initialize(const Xs& grids, const Ys& values) override { util::initialize_with(obj_.obj_, grids, values); this->set_vectors(); }

@@ -48,7 +48,7 @@ int main()
         const auto obj = j.get<egret::math::interp1d::linear<std::chrono::sys_days, double>>();
         auto any = egret::math::interp1d::any_mutable(obj);
         any.update(1, 3.5);
-
+        std::cout << any.is_1st_ord_differentiable() << std::endl;
         const auto ymd = 2022y/9/1;
         const auto yy = any.integrate(std::chrono::sys_days(ymd) + std::chrono::days(100), std::chrono::sys_days(ymd));
         std::cout << yy << std::endl;

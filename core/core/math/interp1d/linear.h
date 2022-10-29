@@ -216,7 +216,7 @@ namespace egret::math::interp1d {
             };
 
             const auto& [f, t] = std::minmax(from, to, less_);
-            const int sign = less_(to, from) ? -1 : 1;
+            const auto sign = static_cast<result_t>(less_(to, from) ? -1 : 1);
             return static_cast<result_t>(
                 sign * egret_detail::interp1d_impl::integrate_impl<result_t>(
                     left_extrap, internal_partial, internal_full, right_extrap,
