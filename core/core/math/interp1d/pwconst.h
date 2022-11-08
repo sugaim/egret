@@ -347,6 +347,11 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::pwconst<X, Y, P, Less>;
 
         template <typename Json>
+            requires std::is_default_constructible_v<Less> && requires (const Json& j) {
+                { j.template get<X>() } -> std::convertible_to<X>;
+                { j.template get<Y>() } -> std::convertible_to<Y>;
+                { j.template get<P>() } -> std::convertible_to<P>;
+            }
         static target_type from_json(const Json& j)
         {
             namespace impl = egret_detail::interp1d_impl;
@@ -358,6 +363,11 @@ namespace nlohmann {
         }
 
         template <typename Json>
+            requires requires (Json& j, const X& x, const Y& y, const P& p) {
+                j = x;
+                j = y;
+                j = p;
+            }
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;
@@ -373,6 +383,11 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::generic_pwconst<Xs, Ys, P, Less>;
 
         template <typename Json>
+            requires requires (Json& j, std::ranges::range_reference_t<const Xs> x, std::ranges::range_reference_t<const Ys> y, const P& p) {
+                j = x;
+                j = y;
+                j = p;
+            }
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;
@@ -389,12 +404,22 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::generic_pwconst<std::vector<X>, std::vector<Y>, P, Less>;
 
         template <typename Json>
+            requires std::is_default_constructible_v<Less> && requires (const Json& j) {
+                { j.template get<X>() } -> std::convertible_to<X>;
+                { j.template get<Y>() } -> std::convertible_to<Y>;
+                { j.template get<P>() } -> std::convertible_to<P>;
+            }
         static target_type from_json(const Json& j)
         {
             using super_type = adl_serializer<egret::math::interp1d::pwconst<X, Y, P, Less>>;
             return target_type(static_cast<super_type&&>(super_type::from_json(j)));
         }
         template <typename Json>
+            requires requires (Json& j, const X& x, const Y& y, const P& p) {
+                j = x;
+                j = y;
+                j = p;
+            }
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;

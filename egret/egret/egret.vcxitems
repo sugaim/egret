@@ -15,10 +15,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)auto_link.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\any_evaluator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\composite_evaluator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\fixed_floater_swap.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\swap_constraint.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\term_rate_cf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\scaled_evaluator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\fixed_rate_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\fixed_rate_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\float_rate_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\ois_coupon_cf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\term_rate_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)markets\holiday_adjustment.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\act360.h" />
@@ -33,7 +42,8 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\bumped_yield_curve.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\composite_curve.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\concepts.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\curve_component.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\curve_relations.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\discount_factor.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\forward_rate_base_yield_curve.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\joind_yield_curve.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\log_df_based_yield_curve.h" />
@@ -45,6 +55,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)instruments\src\ois_coupon_cf.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)markets\src\holiday_adjustment.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

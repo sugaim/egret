@@ -100,7 +100,7 @@ namespace egret::util::j2obj {
     class construct_t {
     public:
         template <typename ...D>
-        constexpr auto operator()(D&& ...deserializers)
+        constexpr auto operator()(D&& ...deserializers) const
             -> constructor<T, std::remove_cvref_t<D>...>
         {
             using result_t = constructor<T, std::remove_cvref_t<D>...>;

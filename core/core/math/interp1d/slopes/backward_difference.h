@@ -3,6 +3,7 @@
 #include <concepts>
 #include <iterator>
 #include <ranges>
+#include <nlohmann/json_fwd.hpp>
 #include "concepts.h"
 #include "../concepts.h"
 #include "core/math/algebra/concepts.h"
@@ -55,3 +56,15 @@ namespace egret::math::interp1d {
     }; // class backward_difference
 
 } // namespace egret::math::interp1d
+
+namespace nlohmann {
+    template <>
+    struct adl_serializer<egret::math::interp1d::backward_difference> {
+        template <typename Json>
+        static void from_json(const Json& j, egret::math::interp1d::backward_difference&) noexcept {}
+
+        template <typename Json>
+        static void to_json(Json& j, const egret::math::interp1d::backward_difference&) noexcept {}
+    };
+
+} // namespace nlohmann

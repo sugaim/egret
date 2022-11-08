@@ -65,3 +65,15 @@ namespace egret::math::interp1d {
     }; // class central_difference
 
 } // namespace egret::math::interp1d
+
+namespace nlohmann {
+    template <>
+    struct adl_serializer<egret::math::interp1d::central_difference> {
+        template <typename Json>
+        static void from_json(const Json&, egret::math::interp1d::central_difference&) noexcept {}
+
+        template <typename Json>
+        static void to_json(Json&, const egret::math::interp1d::central_difference&) noexcept {}
+    };
+
+} // namespace nlohmann

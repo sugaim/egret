@@ -5,9 +5,18 @@
 #include <array>
 #include "core/type_traits/special_functions_properties.h"
 #include "concepts.h"
-#include "curve_component.h"
 
 namespace egret::model {
+// -----------------------------------------------------------------------------
+//  [struct] curve_component
+// -----------------------------------------------------------------------------
+    template <cpt::yield_curve C>
+    struct curve_component {
+        std::string name;
+        double multiplier = 1;
+        C curve;
+    };
+    
 // -----------------------------------------------------------------------------
 //  [class] composite_curve
 // -----------------------------------------------------------------------------

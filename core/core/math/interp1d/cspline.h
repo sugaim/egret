@@ -1,9 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <nlohmann/json_fwd.hpp>
 #include "concepts.h"
 #include "core/math/algebra/concepts.h"
 #include "core/utils/range_utils/vector_assign.h"
+#include "core/utils/json_utils/j2obj.h"
 #include "core/type_traits/special_functions_properties.h"
 #include "core/concepts/constructible_to.h"
 #include "core/assertions/assertion.h"
@@ -11,6 +13,7 @@
 #include "auxiliary/find_index_and_relpos.h"
 #include "auxiliary/interpolatee_validation.h"
 #include "auxiliary/integrate_impl.h"
+#include "auxiliary/json_deserializer_impl.h"
 #include "slopes/any_slope_generator.h"
 
 namespace egret::math::interp1d {
@@ -330,3 +333,39 @@ namespace egret::math::interp1d {
         -> cspline<std::ranges::range_value_t<Xs>, std::ranges::range_value_t<Ys>, SG, Less>;
         
 } // namespace egret::math::interp1d
+
+namespace nlohmann {
+    template <typename X, typename Y, typename SG, typename Less>
+    struct adl_serializer<egret::math::interp1d::cspline<X, Y, SG, Less>> {
+        using target_type = egret::math::interp1d::cspline<X, Y, SG, Less>;
+
+        template <typename Json>
+            //requires std::is_default_constructible_v<Less> && requires (const Json& j) {
+            //    { j.template get<X>() } -> std::convertible_to<X>;
+            //    { j.template get<Y>() } -> std::convertible_to<Y>;
+            //    { j.template get<SG>() } -> std::convertible_to<SG>;
+            //}
+        static target_type from_json(const Json& j)
+        {
+            namespace impl = egret_detail::interp1d_impl;
+            auto [xs, ys] = impl::recover_knots<X, Y>(j);
+            auto slope_gen = ("slope_generator" >> egret::util::j2obj::get<SG>)(j);
+            return target_type{std::move(xs), std::move(ys), std::move(slope_gen)};
+        }
+
+        template <typename Json>
+            //requires requires (Json& j, const X& x, const Y& y, const SG& sg) {
+            //    j = x;
+            //    j = y;
+            //    j = sg;
+            //}
+        static void to_json(Json& j, const target_type& obj)
+        {
+            namespace interp1d = egret::math::interp1d;
+            namespace interp1d_impl = egret_detail::interp1d_impl;
+            interp1d_impl::records_knots(j, interp1d::grids(obj), interp1d::values(obj));
+            j["slope_generator"] = obj.slope_generator();
+        }
+    };
+
+} // namespace nlohmann

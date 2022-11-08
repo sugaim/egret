@@ -138,7 +138,7 @@ namespace egret::math::interp1d {
 
         template <cpt::interpolation1d_of<X, Y> F>
             requires cpt::different_from<F, this_type>
-        explicit any(F&& f)
+        any(F&& f)
             : obj_(std::make_shared<concrete<std::remove_cvref_t<F>>>(std::forward<F>(f)))
         {
         }
@@ -274,7 +274,7 @@ namespace egret::math::interp1d {
 
         template <cpt::mutable_interpolation1d<Xs, Ys> F>
             requires cpt::different_from<F, this_type>
-        explicit any_mutable(F&& f)
+        any_mutable(F&& f)
             : super_type()
         {
             super_type::obj_ = std::make_shared<mutable_concrete<std::remove_cvref_t<F>>>(std::forward<F>(f));

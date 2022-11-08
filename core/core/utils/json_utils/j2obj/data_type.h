@@ -104,11 +104,65 @@ namespace egret::util::j2obj {
 //  [value] array
 // -----------------------------------------------------------------------------
     class array_t : public json_deserializer_interface<array_t> {
+    private:
+        template <std::copyable C>
+        struct range_transformer {
+            template <std::ranges::range JsonArray>
+                requires std::is_invocable_v<const C&, std::ranges::range_reference_t<const JsonArray&>>
+            auto operator()(const JsonArray& js) const
+                -> std::ranges::transform_view<const JsonArray&, C>
+            {
+                return std::ranges::transform_view<const JsonArray&, C>(js, static_cast<C>(converter));
+            }
+
+            std::remove_cvref_t<C> converter;
+        };
+        template <std::copyable C>
+        struct vector_transformer {
+            template <std::ranges::range JsonArray>
+                requires std::is_invocable_v<const C&, std::ranges::range_reference_t<const JsonArray&>>
+            auto operator()(const JsonArray& js) const
+                -> std::vector<std::remove_cvref_t<std::invoke_result_t<const C&, std::ranges::range_reference_t<const JsonArray&>>>>
+            {
+                return js | std::views::transform(converter) | std::ranges::to<std::vector>();
+            }
+
+            std::remove_cvref_t<C> converter;
+        };
+
     public:
         template <cpt::basic_json Json>
         auto operator()(const Json& j) const -> const typename Json::array_t&
         {
             return j.template get_ref<const typename Json::array_t&>();
+        }
+
+        template <typename C>
+        constexpr auto to_range_with(C&& converter) const
+            -> transformed_deserializer<array_t, range_transformer<std::remove_cvref_t<C>>>
+        {
+            auto transformer = range_transformer<std::remove_cvref_t<C>>(std::forward<C>(converter));
+            return this->transform(std::move(transformer));
+        }
+        template <typename T>
+        constexpr auto to_range_of() const
+            -> transformed_deserializer<array_t, range_transformer<j2obj::get_t<T>>>
+        {
+            return this->to_range_with(j2obj::get<T>);
+        }
+
+        template <typename C>
+        constexpr auto to_vector_with(C&& converter) const
+            -> transformed_deserializer<array_t, vector_transformer<std::remove_cvref_t<C>>>
+        {
+            auto transformer = vector_transformer<std::remove_cvref_t<C>>(std::forward<C>(converter));
+            return this->transform(std::move(transformer));
+        }
+        template <typename T>
+        constexpr auto to_vector_of() const
+            -> transformed_deserializer<array_t, vector_transformer<j2obj::get_t<T>>>
+        {
+            return this->to_vector_with(j2obj::get<T>);
         }
         
     }; // class array_t

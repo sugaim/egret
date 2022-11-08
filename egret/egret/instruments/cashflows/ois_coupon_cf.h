@@ -6,6 +6,7 @@
 #include <optional>
 #include <utility>
 #include "core/chrono/calendars/calendar.h"
+#include "core/chrono/calendars/calendar_server.h"
 #include "core/utils/string_utils/string_type_map.h"
 #include "core/utils/variant_utils/type_info.h"
 #include "core/utils/construct.h"
@@ -17,8 +18,10 @@
 namespace egret::inst {
 // -----------------------------------------------------------------------------
 //  [struct] ois_observation_convention
+//  [fn] from_dto
+//  [fn] to_dto
 // -----------------------------------------------------------------------------
-    template <typename Cal = chrono::calendar_identifier>
+    template <typename Cal = chrono::calendar>
     struct ois_observation_convention {
         std::chrono::days lockout = {};
         std::chrono::days lookback = {};
@@ -27,6 +30,14 @@ namespace egret::inst {
         Cal rate_reference_calendar = {};
         Cal compound_weight_calendar = {};
     };
+
+    ois_observation_convention<chrono::calendar> from_dto(
+        const ois_observation_convention<chrono::calendar_identifier>& cnv,
+        const chrono::calendar_server& server
+    );
+    ois_observation_convention<chrono::calendar_identifier> to_dto(
+        const ois_observation_convention<chrono::calendar>& cnv
+    );
 
 // -----------------------------------------------------------------------------
 //  [struct] ois_spread_exclusive_compounding
@@ -83,6 +94,7 @@ namespace egret::inst {
         typename N = double
     >
     struct ois_coupon_cf {
+        RateTag discount_tag;
         RateTag rate_tag;
         N notional;
         std::chrono::sys_days accrual_start = {};
@@ -234,6 +246,7 @@ namespace nlohmann {
             namespace util = egret::util;
             namespace j2obj = util::j2obj;
             constexpr auto deser = j2obj::construct<egret::inst::ois_coupon_cf<RateTag, DC, Obs, Cmp, N>>(
+                "discount_tag" >> j2obj::get<RateTag>,
                 "rate_tag" >> j2obj::get<RateTag>,
                 "notional" >> j2obj::get<N>,
                 "accrual_start" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
@@ -249,6 +262,7 @@ namespace nlohmann {
         static void to_json(Json& j, const egret::inst::ois_coupon_cf<RateTag, DC, Obs, Cmp, N>& cf)
         {
             namespace util = egret::util;
+            j["discount_tag"] = cf.discount_tag;
             j["rate_tag"] = cf.rate_tag;
             j["notional"] = cf.notional;
             j["accrual_start"] = util::to_string(cf.accrual_start);

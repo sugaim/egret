@@ -61,7 +61,7 @@ namespace egret::model {
                 cpt::different_from<C, this_type> &&
                 std::is_constructible_v<C, Args...> &&
                 std::is_same_v<C, std::remove_cvref_t<C>>
-        any_yield_curve(std::in_place_type_t<C>, Args&& ...rgs)
+        any_yield_curve(std::in_place_type_t<C>, Args&& ...args)
             : obj_(std::make_unique<concrete<C>>(std::forward<Args>(args)...))
         {
         }
