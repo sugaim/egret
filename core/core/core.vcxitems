@@ -36,7 +36,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)auto_link.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\concepts.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\holiday_adjustment.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\unadjust.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\adjustment_interface.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendar.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\any_calendar_source.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\calendars\calendar.h" />
@@ -53,7 +53,6 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\concepts.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\daycounter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\daycounter_variant.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\holiday_adjustment.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\src\calendar_json_impl.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\stopwatch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\tenor.h" />
