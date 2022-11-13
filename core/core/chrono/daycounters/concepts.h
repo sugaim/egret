@@ -44,13 +44,13 @@ namespace egret_detail::dcf_impl {
 
 } // namespace egret_detail::dcf_impl
 
-namespace egret::mkt::inline cpo {
+namespace egret::chrono::inline cpo {
 // -----------------------------------------------------------------------------
 //  [cpo] dcf
 // -----------------------------------------------------------------------------
     inline constexpr auto dcf = egret_detail::dcf_impl::dcf_t {};
     
-} // namespace egret::mkt::inline cpo
+} // namespace egret::chrono::inline cpo
 
 namespace egret::cpt {
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace egret::cpt {
     concept daycounter = 
         std::copy_constructible<std::remove_cvref_t<C>> &&
         requires (const C& counter, const TimePoint& from, const TimePoint& to) {
-            { mkt::dcf(counter, from, to) } -> std::convertible_to<double>;
+            { chrono::dcf(counter, from, to) } -> std::convertible_to<double>;
         };
 
 } // namespace egret::cpt

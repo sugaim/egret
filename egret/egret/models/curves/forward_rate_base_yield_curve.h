@@ -6,7 +6,7 @@
 #include "core/utils/member_data.h"
 #include "core/math/integrate.h"
 #include "core/type_traits/special_functions_properties.h"
-#include "egret/markets/daycounters/concepts.h"
+#include "egret/chrono/daycounters/concepts.h"
 
 namespace egret::model {
 // -----------------------------------------------------------------------------

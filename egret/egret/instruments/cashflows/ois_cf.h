@@ -4,7 +4,7 @@
 #include "core/chrono/calendars/calendar.h"
 #include "core/chrono/calendars/calendar_server.h"
 #include "core/utils/json_utils/j2obj.h"
-#include "egret/markets/rate.h"
+#include "egret/quantities/rate.h"
 #include "floating_rate_cf.h"
 
 namespace egret::inst::cfs {
@@ -14,7 +14,7 @@ namespace egret::inst::cfs {
     template <typename G = double, typename S = G>
     struct ois_spread_exclusive_compounding {
         G gearing;
-        mkt::rate<S> spread;
+        rate<S> spread;
     };
 
 // -----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------
     template <typename S = double>
     struct ois_flat_compounding {
-        mkt::rate<S> spread;
+        rate<S> spread;
     };
 
 // -----------------------------------------------------------------------------
@@ -30,7 +30,7 @@ namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------
     template <typename S = double>
     struct ois_straight_compounding {
-        mkt::rate<S> spread;
+        rate<S> spread;
     };
 
 // -----------------------------------------------------------------------------
@@ -174,7 +174,7 @@ namespace nlohmann {
 
         static constexpr auto deser = egret::util::j2obj::construct<target_type>(
             "gearing" >> egret::util::j2obj::get<G>,
-            "spread" >> egret::util::j2obj::get<egret::mkt::rate<S>>
+            "spread" >> egret::util::j2obj::get<egret::rate<S>>
         );
 
         template <typename Json>
@@ -186,7 +186,7 @@ namespace nlohmann {
         template <typename Json>
             requires
                 std::is_assignable_v<Json&, const G&> &&
-                std::is_assignable_v<Json&, const egret::mkt::rate<S>&>
+                std::is_assignable_v<Json&, const egret::rate<S>&>
         static void to_json(Json& j, const target_type& conv)
         {
             j["gearing"] = conv.gearing;
@@ -199,7 +199,7 @@ namespace nlohmann {
         using target_type = egret::inst::cfs::ois_flat_compounding<S>;
 
         static constexpr auto deser = egret::util::j2obj::construct<target_type>(
-            "spread" >> egret::util::j2obj::get<egret::mkt::rate<S>>
+            "spread" >> egret::util::j2obj::get<egret::rate<S>>
         );
         template <typename Json>
             requires requires (const Json& j) { deser(j); }
@@ -208,7 +208,7 @@ namespace nlohmann {
             return deser(j);
         }
         template <typename Json>
-            requires std::is_assignable_v<Json&, const egret::mkt::rate<S>&>
+            requires std::is_assignable_v<Json&, const egret::rate<S>&>
         static void to_json(Json& j, const target_type& conv)
         {
             j["spread"] = conv.spread;
@@ -220,7 +220,7 @@ namespace nlohmann {
         using target_type = egret::inst::cfs::ois_straight_compounding<S>;
 
         static constexpr auto deser = egret::util::j2obj::construct<target_type>(
-            "spread" >> egret::util::j2obj::get<egret::mkt::rate<S>>
+            "spread" >> egret::util::j2obj::get<egret::rate<S>>
         );
         template <typename Json>
             requires requires (const Json& j) { deser(j); }
@@ -229,7 +229,7 @@ namespace nlohmann {
             return deser(j);
         }
         template <typename Json>
-            requires std::is_assignable_v<Json&, const egret::mkt::rate<S>&>
+            requires std::is_assignable_v<Json&, const egret::rate<S>&>
         static void to_json(Json& j, const target_type& conv)
         {
             j["spread"] = conv.spread;

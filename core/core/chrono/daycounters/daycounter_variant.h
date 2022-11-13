@@ -5,7 +5,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include "concepts.h"
 
-namespace egret::mkt {
+namespace egret::chrono {
 // -----------------------------------------------------------------------------
 //  [class] daycounter_variant
 // -----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ namespace egret::mkt {
         constexpr double operator()(const TimePoint& from, const TimePoint& to) const
         {
             return std::visit(
-                [&from, &to](const auto& counter) -> double { return mkt::dcf(counter, from, to); },
+                [&from, &to](const auto& counter) -> double { return chrono::dcf(counter, from, to); },
                 static_cast<const super_type&>(*this)
             );
         }
@@ -82,7 +82,7 @@ namespace egret::mkt {
         {
             return std::visit(
                 [&from, &to](const auto& counter) -> double { 
-                    return mkt::dcf(counter, from, to); 
+                    return chrono::dcf(counter, from, to); 
                 },
                 static_cast<const super_type&>(*this)
             );
@@ -90,4 +90,4 @@ namespace egret::mkt {
 
     }; // class daycounter_variant
 
-} // namespace egret::mkt
+} // namespace egret::chrono

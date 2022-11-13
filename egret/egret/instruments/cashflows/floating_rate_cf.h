@@ -5,8 +5,8 @@
 #include <nlohmann/json_fwd.hpp>
 #include "core/utils/string_utils/to_string.h"
 #include "core/utils/json_utils/j2obj.h"
-#include "egret/markets/rate.h"
-#include "egret/markets/daycounters/concepts.h"
+#include "egret/quantities/rate.h"
+#include "egret/chrono/daycounters/concepts.h"
 
 namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ namespace egret::inst::cfs {
         std::chrono::sys_days payment_date = {};
         std::chrono::sys_days cashout_date = {};
         DC accrual_daycounter;
-        std::optional<mkt::rate<R>> fixed_coupon_rate;
+        std::optional<rate<R>> fixed_coupon_rate;
     };
 
 } // namespace egret::inst::cfs
@@ -60,7 +60,7 @@ namespace nlohmann {
             "payment_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
             "cashout_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
             "accrual_daycounter" >> egret::util::j2obj::get<DC>,
-            "fixed_coupon_rate" >> egret::util::j2obj::get<egret::mkt::rate<R>>.optional()
+            "fixed_coupon_rate" >> egret::util::j2obj::get<egret::rate<R>>.optional()
         );
 
         template <typename Json>
@@ -77,7 +77,7 @@ namespace nlohmann {
                 std::is_assignable_v<Json&, const RateDef&> &&
                 std::is_assignable_v<Json&, const N&> &&
                 std::is_assignable_v<Json&, const DC&> &&
-                std::is_assignable_v<Json&, const egret::mkt::rate<R>&>
+                std::is_assignable_v<Json&, const egret::rate<R>&>
         static void to_json(Json& j, const target_type& cf)
         {
             namespace util = egret::util;

@@ -6,8 +6,8 @@
 #include "core/math/der.h"
 #include "core/utils/member_data.h"
 #include "core/type_traits/special_functions_properties.h"
-#include "egret/markets/daycounters/concepts.h"
-#include "egret/markets/daycounters/act365f.h"
+#include "egret/chrono/daycounters/concepts.h"
+#include "egret/chrono/daycounters/act365f.h"
 
 namespace egret::model {
 // -----------------------------------------------------------------------------

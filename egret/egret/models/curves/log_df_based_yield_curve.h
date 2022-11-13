@@ -6,8 +6,8 @@
 #include "core/math/der.h"
 #include "core/utils/member_data.h"
 #include "core/type_traits/special_functions_properties.h"
-#include "egret/markets/daycounters/concepts.h"
-#include "egret/markets/daycounters/act365f.h"
+#include "egret/chrono/daycounters/concepts.h"
+#include "egret/chrono/daycounters/act365f.h"
 
 namespace egret::model {
 // -----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ namespace egret::model {
                 auto der = math::der1(f_.get(), from);
                 return std::move(der) * 365.;
             }
-            auto dcf = mkt::dcf(mkt::act365f, from, to);
+            auto dcf = chrono::dcf(chrono::act365f, from, to);
             auto from_log_df = std::invoke(f_.get(), from);
             auto to_log_df = std::invoke(f_.get(), to);
 

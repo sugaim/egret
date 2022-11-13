@@ -30,15 +30,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\floating_rate_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\ois_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\term_rate_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\holiday_adjustment.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\act360.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\act365f.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\any_daycounter.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\concepts.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\daycounter.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\daycounters\daycounter_variant.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)markets\rate.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)quantities\rate.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\any_yield_curve.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\bumped_yield_curve.h" />
@@ -57,7 +49,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(MSBuildThisFileDirectory)markets\src\holiday_adjustment.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\holiday_adjustment.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

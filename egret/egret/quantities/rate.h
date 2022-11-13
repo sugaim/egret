@@ -10,7 +10,7 @@
 #include "core/utils/json_utils/j2obj.h"
 #include "core/concepts/non_void.h"
 
-namespace egret::mkt {
+namespace egret {
 // -----------------------------------------------------------------------------
 //  [class] rate
 // -----------------------------------------------------------------------------
@@ -141,17 +141,17 @@ namespace egret::mkt {
         return rate(lhs.value() - rhs.value());
     }
 
-} // namespace egret::mkt
+} // namespace egret
 
 namespace std {
 // -----------------------------------------------------------------------------
 //  [struct] formatter
 // -----------------------------------------------------------------------------
     template <typename T, typename Char>
-    struct formatter<egret::mkt::rate<T>, Char> : formatter<T, Char> {
+    struct formatter<egret::rate<T>, Char> : formatter<T, Char> {
         template <typename FmtCtxt>
             requires egret::cpt::to_stringable<T, Char>
-        auto format(const egret::mkt::rate<T>& rate, FmtCtxt& ctxt) const
+        auto format(const egret::rate<T>& rate, FmtCtxt& ctxt) const
         {
             auto it = formatter<T, Char>::format(rate.bps(), ctxt);
             *it = 'b'; ++it;
@@ -164,27 +164,27 @@ namespace std {
 
 namespace nlohmann {
     template <typename R>
-    struct adl_serializer<egret::mkt::rate<R>> {
+    struct adl_serializer<egret::rate<R>> {
         template <typename Json>
             requires std::is_constructible_v<R, double>                
-        static egret::mkt::rate<R> from_json(const Json& j)
+        static egret::rate<R> from_json(const Json& j)
         {
-            if constexpr (egret::cpt::parsable<egret::mkt::rate<R>>) {
+            if constexpr (egret::cpt::parsable<egret::rate<R>>) {
                 if (j.is_number()) {
-                    return egret::mkt::rate<R>::from_value(static_cast<R>(j.get<double>()));
+                    return egret::rate<R>::from_value(static_cast<R>(j.get<double>()));
                 }
                 else {
-                    constexpr auto deser = egret::util::j2obj::string.parse_to<egret::mkt::rate<R>>();
+                    constexpr auto deser = egret::util::j2obj::string.parse_to<egret::rate<R>>();
                     return deser(j);
                 }
             }
             else {
-                return egret::mkt::rate<R>::from_value(static_cast<R>(j.get<double>()));
+                return egret::rate<R>::from_value(static_cast<R>(j.get<double>()));
             }
         }
         template <typename Json>
             requires egret::cpt::to_stringable<R, char>
-        static void to_json(Json& j, const egret::mkt::rate<R>& rate)
+        static void to_json(Json& j, const egret::rate<R>& rate)
         {
             j = std::format("{}", rate);
         }

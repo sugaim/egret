@@ -1,6 +1,6 @@
 #pragma once
 
-#include "egret/markets/daycounters/concepts.h"
+#include "egret/chrono/daycounters/concepts.h"
 #include "egret/models/curves/concepts.h"
 #include "egret/instruments/cashflows/term_rate_cf.h"
 #include "floating_rate_cf.h"
@@ -27,7 +27,7 @@ namespace egret::analytic {
                 return model::forward_rate(pcurve, stt, end);
             }
             else {
-                const double dcf = mkt::dcf(rate_def.rate_daycounter, stt, end);
+                const double dcf = chrono::dcf(rate_def.rate_daycounter, stt, end);
                 auto fwd_df = model::discount_factor(crv, stt, end);
                 return (1. / std::move(fwd_df) - 1.) / dcf;
             }

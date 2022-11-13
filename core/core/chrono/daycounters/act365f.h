@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace egret::mkt {
+namespace egret::chrono {
 // -----------------------------------------------------------------------------
 //  [class] act365f_t
 //  [value] act365f
@@ -29,4 +29,4 @@ namespace egret::mkt {
 
     inline constexpr auto act365f = act365f_t {};
 
-} // namespace egret::mkt
+} // namespace egret::chrono

@@ -23,7 +23,7 @@ namespace egret::chrono {
     // -------------------------------------------------------------------------
     //  ctors, dtor and assigns
     //
-        calendar() = delete;
+        calendar();
         calendar(const this_type&) noexcept = default;
         calendar(this_type&&) noexcept = default;
 
@@ -35,6 +35,13 @@ namespace egret::chrono {
 
         this_type& operator =(const this_type&) noexcept = default;
         this_type& operator =(this_type&&) noexcept = default;
+
+    // -------------------------------------------------------------------------
+    //  is_holiday
+    //  is_businessday
+    //
+        bool is_holiday(const std::chrono::sys_days& d) const;
+        bool is_businessday(const std::chrono::sys_days& d) const;
 
     // -------------------------------------------------------------------------
     //  get

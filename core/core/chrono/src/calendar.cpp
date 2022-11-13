@@ -64,6 +64,8 @@ namespace egret::chrono {
 // -----------------------------------------------------------------------------
 //  [class] calendar
 // -----------------------------------------------------------------------------
+    calendar::calendar() : calendar({}, {}, {}) {}
+
     calendar::calendar(
         calendar_identifier identifier,
         std::vector<std::chrono::sys_days> additional_hols,
@@ -75,6 +77,22 @@ namespace egret::chrono {
             _setup_additional_xdays(std::move(additional_bds), _is_weekday, false)
         ))
     {
+    }
+
+    bool calendar::is_holiday(const std::chrono::sys_days& d) const
+    {
+        const auto wd = std::chrono::weekday(d);
+        const auto is_weekday = wd != std::chrono::Saturday && wd != std::chrono::Sunday;
+        if (is_weekday) [[likely]] {
+            return std::ranges::binary_search(this->additional_holidays(), d);
+        }
+        else {
+            return !std::ranges::binary_search(this->additional_businessdays(), d);
+        }
+    }
+    bool calendar::is_businessday(const std::chrono::sys_days& d) const
+    {
+        return !this->is_holiday(d);
     }
 
     const calendar_identifier& calendar::identifier() const noexcept { return impl_->identifier; }

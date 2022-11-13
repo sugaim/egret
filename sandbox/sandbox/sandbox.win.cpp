@@ -13,7 +13,7 @@
 #include "core/chrono/stopwatch.h"
 #include "core/math/interp1d.h"
 #include "core/utils/json_utils/chrono.h"
-#include "egret/markets/daycounters/daycounter.h"
+#include "egret/chrono/daycounters/daycounter.h"
 #include "egret/instruments/cashflows/floating_rate_cf.h"
 #include "egret/instruments/cashflows/ois_cf.h"
 #include "core/math/interp1d/any.h"
@@ -54,7 +54,7 @@ int main()
             ]
         )");
 
-        using cf_t = egret::inst::cfs::fixed_rate_cf<std::string, egret::mkt::daycounter>;
+        using cf_t = egret::inst::cfs::fixed_rate_cf<std::string, egret::chrono::daycounter>;
         using result_t = egret::fit::yc::composite_evaluator<cf_t>;
 
         const auto obj = cfs.get<result_t>();
@@ -113,7 +113,7 @@ int main()
         //    "spread": 0.042
         //})");
 
-        //const auto cf = j.get<egret::inst::float_rate_cf<std::string, egret::mkt::daycounter>>();
+        //const auto cf = j.get<egret::inst::float_rate_cf<std::string, egret::chrono::daycounter>>();
 
         //nlohmann::json jjj;
         //jjj = cf;

@@ -4,7 +4,7 @@
 #include "core/assertions/assertion.h"
 #include "egret/models/curves/concepts.h"
 #include "egret/models/curves/discount_factor.h"
-#include "egret/markets/daycounters/concepts.h"
+#include "egret/chrono/daycounters/concepts.h"
 #include "egret/instruments/cashflows/floating_rate_cf.h"
 
 namespace egret::analytic {
@@ -48,7 +48,7 @@ namespace egret::analytic {
         const auto& pcurve = *(curves.find(cf.curve_tag));
         const auto& rate_def = cf.rate_definition;
 
-        const double dcf = mkt::dcf(cf.accrual_daycounter, cf.accrual_start, cf.accrual_end);
+        const double dcf = chrono::dcf(cf.accrual_daycounter, cf.accrual_start, cf.accrual_end);
         auto df = model::discount_factor(dcurve, vdt, cf.payment_date);
 
         if (cf.fixed_coupon_rate) {

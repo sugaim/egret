@@ -5,7 +5,7 @@
 #include "core/utils/maybe.h"
 #include "concepts.h"
 
-namespace egret::mkt {
+namespace egret::chrono {
 // -----------------------------------------------------------------------------
 //  [class] any_daycounter
 // -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ namespace egret::mkt {
             model(C obj) noexcept(std::is_nothrow_move_constructible_v<C>): obj_(std::move(obj)) {}
 
             std::unique_ptr<const base> clone() const { return std::make_unique<model>(obj_); }
-            double dcf(const TimePoint& from, const TimePoint& to) const override { return mkt::dcf(obj_, from, to); }
+            double dcf(const TimePoint& from, const TimePoint& to) const override { return chrono::dcf(obj_, from, to); }
             std::type_index type() const noexcept override { return typeid(C); }
             const void* pointer() const noexcept override { return std::addressof(obj_); }
 
@@ -84,4 +84,4 @@ namespace egret::mkt {
 
     }; // class any_daycounter
     
-} // namespace egret::mkt
+} // namespace egret::chrono

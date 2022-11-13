@@ -8,7 +8,7 @@
 #include "act365f.h"
 #include "act360.h"
 
-namespace egret::mkt {
+namespace egret::chrono {
 // -----------------------------------------------------------------------------
 //  [type] daycounter
 // -----------------------------------------------------------------------------
@@ -26,4 +26,4 @@ namespace egret::mkt {
         };
     }
 
-} // namespace egret::mkt
+} // namespace egret::chrono

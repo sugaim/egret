@@ -2,7 +2,7 @@
 
 #include <nlohmann/json_fwd.hpp>
 #include "core/utils/json_utils/j2obj.h"
-#include "egret/markets/rate.h"
+#include "egret/quantities/rate.h"
 #include "floating_rate_cf.h"
 
 namespace egret::inst::cfs {
@@ -15,7 +15,7 @@ namespace egret::inst::cfs {
         std::chrono::sys_days reference_start;
         std::chrono::sys_days reference_end;
         G gearing;
-        mkt::rate<R> spread;
+        rate<R> spread;
     };
 
 // -----------------------------------------------------------------------------
