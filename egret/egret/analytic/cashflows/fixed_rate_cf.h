@@ -1,11 +1,14 @@
 #pragma once
 
+#include <map>
+#include <chrono>
 #include "core/assertions/assertion.h"
 #include "egret/models/curves/concepts.h"
 #include "egret/models/curves/discount_factor.h"
+#include "egret/markets/daycounters/concepts.h"
 #include "egret/instruments/cashflows/fixed_rate_cf.h"
 
-namespace egret::fit::yc {
+namespace egret::analytic {
 // -----------------------------------------------------------------------------
 //  [fn] evaluate
 // -----------------------------------------------------------------------------
@@ -13,6 +16,8 @@ namespace egret::fit::yc {
         typename DiscountTag, cpt::daycounter DC, typename N, typename R,
         typename RateTag, cpt::yield_curve Curve
     >
+        requires
+            std::strict_weak_order<std::less<>, DiscountTag, RateTag>
     constexpr model::forward_rate_t<Curve> evaluate(
         const inst::cfs::fixed_rate_cf<DiscountTag, DC, N, R>& cf,
         const std::chrono::sys_days& vdt,
@@ -29,4 +34,4 @@ namespace egret::fit::yc {
         return cf.notional * cf.rate.value() * dcf * std::move(df);
     }
 
-} // namespace egret::fit::yc
+} // namespace egret::analytic

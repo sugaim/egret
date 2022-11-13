@@ -330,22 +330,22 @@ namespace egret::util::inline cpo {
 
 namespace egret::cpt {
 // -----------------------------------------------------------------------------
-//  [concept] basic_parseable
-//  [concept] parseable
-//  [concept] wparseable
+//  [concept] basic_parsable
+//  [concept] parsable
+//  [concept] wparsable
 // -----------------------------------------------------------------------------
     template <typename T, typename Char>
-    concept basic_parseable =
+    concept basic_parsable =
         (std::same_as<Char, char> || std::same_as<Char, wchar_t>) &&
         requires (std::basic_string_view<Char> sv) {
-            { util::basic_parse<T, Char>(sv) } -> std::convertible_to<T>;
+            { util::from_basic_string<T, Char>(sv) } -> std::convertible_to<T>;
         };
 
     template <typename T>
-    concept parseable = basic_parseable<T, char>;
+    concept parsable = basic_parsable<T, char>;
 
     template <typename T>
-    concept wparseable = basic_parseable<T, wchar_t>;
+    concept wparsable = basic_parsable<T, wchar_t>;
 
 } // namespace egret::cpt
 

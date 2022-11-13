@@ -39,25 +39,30 @@ namespace nlohmann {
         
         using target_type = egret::inst::cfs::fixed_rate_cf<DiscountTag, DC, N, R>;
 
+        static constexpr auto deser = egret::util::j2obj::construct<target_type>(
+            "discount_tag" >> egret::util::j2obj::get<DiscountTag>,
+            "notional" >> egret::util::j2obj::get<N>,
+            "accrual_start" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "accrual_end" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "payment_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "cashout_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "accrual_daycounter" >> egret::util::j2obj::get<DC>,
+            "rate" >> egret::util::j2obj::get<egret::mkt::rate<R>>
+        );
+
         template <typename Json>
+            requires requires (const Json& j) { deser(j); }
         static target_type from_json(const Json& j)
         {
-            namespace util = egret::util;
-            namespace j2obj = util::j2obj;
-            constexpr auto deser = j2obj::construct<target_type>(
-                "discount_tag" >> j2obj::get<DiscountTag>,
-                "notional" >> j2obj::get<N>,
-                "accrual_start" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "accrual_end" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "payment_date" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "cashout_date" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "accrual_daycounter" >> j2obj::get<DC>,
-                "rate" >> j2obj::get<egret::mkt::rate<R>>
-            );
             return deser(j);
         }
 
         template <typename Json>
+            requires
+                std::is_assignable_v<Json&, const DiscountTag&> &&
+                std::is_assignable_v<Json&, const N&> &&
+                std::is_assignable_v<Json&, const DC&> &&
+                std::is_assignable_v<Json&, const egret::mkt::rate<R>&>
         static void to_json(Json& j, const target_type& cf)
         {
             namespace util = egret::util;

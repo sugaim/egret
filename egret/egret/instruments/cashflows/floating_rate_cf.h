@@ -10,7 +10,7 @@
 
 namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------
-//  [struct] float_rate_cf
+//  [struct] floating_rate_cf
 // -----------------------------------------------------------------------------    
     /**
      * @brief PV = DF(payment_date) * notional * accrual_daycounter(accrual_start, accrual_end) * rate,
@@ -19,14 +19,15 @@ namespace egret::inst::cfs {
      * @tparam DiscountTag: discount curve specifier
      * @tparam RateTag: projection curve specifier
      * @tparam RateDef: rate definition, which includes term, spread and so on.
-     * @tparam N: notional
      * @tparam DC: daycounter
+     * @tparam N: notional
+     * @tparam R: fixing rate
     */
     template <
         typename DiscountTag, typename RateTag, typename RateDef,
         typename DC, typename N = double, typename R = double
     >
-    struct float_rate_cf {
+    struct floating_rate_cf {
         DiscountTag discount_tag;
         RateTag curve_tag;
         RateDef rate_definition;
@@ -37,39 +38,46 @@ namespace egret::inst::cfs {
         std::chrono::sys_days payment_date = {};
         std::chrono::sys_days cashout_date = {};
         DC accrual_daycounter;
-        std::optional<mkt::rate<R>> fixing_rate;
+        std::optional<mkt::rate<R>> fixed_coupon_rate;
     };
 
 } // namespace egret::inst::cfs
 
 namespace nlohmann {
     template <typename DiscountTag, typename RateTag, typename RateDef, typename DC, typename N, typename R>
-    struct adl_serializer<egret::inst::cfs::float_rate_cf<DiscountTag, RateTag, RateDef, DC, N, R>> {
+    struct adl_serializer<egret::inst::cfs::floating_rate_cf<DiscountTag, RateTag, RateDef, DC, N, R>> {
 
-        using target_type = egret::inst::cfs::float_rate_cf<DiscountTag, RateTag, RateDef, DC, N, R>;
+        using target_type = egret::inst::cfs::floating_rate_cf<DiscountTag, RateTag, RateDef, DC, N, R>;
+
+        static constexpr auto deser = egret::util::j2obj::construct<target_type>(
+            "discount_tag" >> egret::util::j2obj::get<DiscountTag>,
+            "curve_tag" >> egret::util::j2obj::get<RateTag>,
+            "rate_definition" >> egret::util::j2obj::get<RateDef>,
+            "notional" >> egret::util::j2obj::get<N>,
+            "accrual_start" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "accrual_end" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "fixing_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "payment_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "cashout_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "accrual_daycounter" >> egret::util::j2obj::get<DC>,
+            "fixed_coupon_rate" >> egret::util::j2obj::get<egret::mkt::rate<R>>.optional()
+        );
 
         template <typename Json>
+            requires requires (const Json& j) { deser(j); }
         static target_type from_json(const Json& j)
         {
-            namespace util = egret::util;
-            namespace j2obj = util::j2obj;
-            constexpr auto deser = j2obj::construct<target_type>(
-                "discount_tag" >> j2obj::get<DiscountTag>,
-                "curve_tag" >> j2obj::get<RateTag>,
-                "rate_definition" >> j2obj::get<RateDef>,
-                "notional" >> j2obj::get<N>,
-                "accrual_start" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "accrual_end" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "fixing_date" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "payment_date" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "cashout_date" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "accrual_daycounter" >> j2obj::get<DC>,
-                "fixing_rate" >> j2obj::get<egret::mkt::rate<R>>.optional()
-            );
             return deser(j);
         }
 
         template <typename Json>
+            requires
+                std::is_assignable_v<Json&, const DiscountTag&> &&
+                std::is_assignable_v<Json&, const RateTag&> &&
+                std::is_assignable_v<Json&, const RateDef&> &&
+                std::is_assignable_v<Json&, const N&> &&
+                std::is_assignable_v<Json&, const DC&> &&
+                std::is_assignable_v<Json&, const egret::mkt::rate<R>&>
         static void to_json(Json& j, const target_type& cf)
         {
             namespace util = egret::util;
@@ -84,8 +92,8 @@ namespace nlohmann {
             j["payment_date"] = util::to_string(cf.payment_date);
             j["cashout_date"] = util::to_string(cf.cashout_date);
             j["accrual_daycounter"] = cf.accrual_daycounter;
-            if (cf.fixing_rate) {
-                j["fixing_rate"] = *cf.fixing_rate;
+            if (cf.fixed_coupon_rate) {
+                j["fixed_coupon_rate"] = *cf.fixed_coupon_rate;
             }
         }
     };

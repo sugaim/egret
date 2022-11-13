@@ -340,11 +340,11 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::cspline<X, Y, SG, Less>;
 
         template <typename Json>
-            //requires std::is_default_constructible_v<Less> && requires (const Json& j) {
-            //    { j.template get<X>() } -> std::convertible_to<X>;
-            //    { j.template get<Y>() } -> std::convertible_to<Y>;
-            //    { j.template get<SG>() } -> std::convertible_to<SG>;
-            //}
+            requires 
+                std::is_default_constructible_v<Less> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<X>> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<Y>> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<SG>>
         static target_type from_json(const Json& j)
         {
             namespace impl = egret_detail::interp1d_impl;
@@ -354,11 +354,10 @@ namespace nlohmann {
         }
 
         template <typename Json>
-            //requires requires (Json& j, const X& x, const Y& y, const SG& sg) {
-            //    j = x;
-            //    j = y;
-            //    j = sg;
-            //}
+            requires
+                std::is_assignable_v<Json&, const X&> &&
+                std::is_assignable_v<Json&, const Y&> &&
+                std::is_assignable_v<Json&, const SG&>
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;

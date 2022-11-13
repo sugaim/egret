@@ -64,13 +64,18 @@ namespace nlohmann {
 
         using target_type = egret::fit::yc::composite_evaluator<Component>;
 
+        static constexpr auto deser = egret::util::j2obj::construct<target_type>(
+            egret::util::j2obj::array.to_vector_of<Component>()
+        );
+
         template <typename Json>
+            requires requires (const Json& j) { deser(j); }
         static target_type from_json(const Json& j)
         {
-            namespace j2obj = egret::util::j2obj;
-            return target_type(j2obj::array.to_vector_of<Component>()(j));
+            return deser(j);
         }
         template <typename Json>
+            requires std::is_assignable_v<Json&, const std::vector<Component>&>
         static void to_json(Json& j, const target_type& obj)
         {
             j = obj.components();

@@ -44,8 +44,8 @@ namespace egret::fit::yc {
     // -------------------------------------------------------------------------
     //  get
     //
-        const auto& receive_leg() const noexcept { return rec_.components(); }
-        const auto& payment_leg() const noexcept { return pay_.components(); }
+        const std::vector<RecCf>& receive_leg() const noexcept { return rec_.components(); }
+        const std::vector<PayCf>& payment_leg() const noexcept { return pay_.components(); }
 
     private:
         composite_evaluator<RecCf> rec_;

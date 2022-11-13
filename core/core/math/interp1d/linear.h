@@ -316,10 +316,10 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::linear<X, Y, Less>;
 
         template <typename Json>
-            requires requires (const Json& j) {
-                { j.template get<X>() } -> std::convertible_to<X>;
-                { j.template get<Y>() } -> std::convertible_to<Y>;
-            }
+            requires 
+                std::is_default_constructible_v<Less> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<X>> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<Y>>
         static target_type from_json(const Json& j)
         {
             namespace impl = egret_detail::interp1d_impl;
@@ -328,10 +328,9 @@ namespace nlohmann {
         }
 
         template <typename Json>
-            requires requires (Json& j, const X& x, const Y& y) {
-                j = x;
-                j = y;
-            }
+            requires
+                std::is_assignable_v<Json&, const X&> &&
+                std::is_assignable_v<Json&, const Y&>
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;
@@ -345,10 +344,9 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::generic_linear<Xs, Ys, Less>;
 
         template <typename Json>
-            requires requires (Json& j, std::ranges::range_reference_t<const Xs> x, std::ranges::range_reference_t<const Ys> y) {
-                j = x;
-                j = y;
-            }
+            requires
+                std::is_assignable_v<Json&, std::ranges::range_reference_t<const Xs&>> &&
+                std::is_assignable_v<Json&, std::ranges::range_reference_t<const Ys&>>
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;
@@ -363,20 +361,19 @@ namespace nlohmann {
         using target_type = egret::math::interp1d::generic_linear<std::vector<X>, std::vector<Y>, Less>;
 
         template <typename Json>
-            requires requires (const Json& j) {
-                { j.template get<X>() } -> std::convertible_to<X>;
-                { j.template get<Y>() } -> std::convertible_to<Y>;
-            }
+            requires 
+                std::is_default_constructible_v<Less> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<X>> &&
+                egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<Y>>
         static target_type from_json(const Json& j)
         {
             using super_type = adl_serializer<egret::math::interp1d::linear<X, Y, Less>>;
             return target_type(static_cast<super_type&&>(super_type::from_json(j)));
         }
         template <typename Json>
-            requires requires (Json& j, const X& x, const Y& y) {
-                j = x;
-                j = y;
-            }
+            requires
+                std::is_assignable_v<Json&, const X&> &&
+                std::is_assignable_v<Json&, const Y&>
         static void to_json(Json& j, const target_type& obj)
         {
             namespace interp1d = egret::math::interp1d;

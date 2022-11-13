@@ -167,13 +167,13 @@ namespace std {
 
 namespace nlohmann {
     template <typename T>
-        requires 
-            egret::cpt::string_value_mappable<T> &&
-            std::equality_comparable<T> &&
-            egret::util::enable_string_value_mappable_json_serializer<T>
     struct adl_serializer<T> {
 
         template <typename Json>
+            requires 
+                egret::cpt::string_value_mappable<T> &&
+                std::equality_comparable<T> &&
+                egret::util::enable_string_value_mappable_json_serializer<T>
         static T from_json(const Json& data)
         {
             static_assert(
@@ -202,6 +202,10 @@ namespace nlohmann {
         }
         
         template <typename Json>
+            requires 
+                egret::cpt::string_value_mappable<T> &&
+                std::equality_comparable<T> &&
+                egret::util::enable_string_value_mappable_json_serializer<T>
         static void to_json(Json& data, const T& elem)
         {
             const auto& map = egret::util::string_value_map_of(std::type_identity<T>());

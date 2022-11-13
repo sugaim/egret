@@ -11,6 +11,9 @@ namespace egret_detail::interp1d_impl {
 //  [fn] record_knots
 // -----------------------------------------------------------------------------
     template <egret::cpt::basic_json Json, std::ranges::forward_range Xs, std::ranges::forward_range Ys>
+        requires
+            std::is_assignable_v<Json&, std::ranges::range_reference_t<const Xs&>> &&
+            std::is_assignable_v<Json&, std::ranges::range_reference_t<const Ys&>>
     void records_knots(Json& j, const Xs& grids, const Ys& values)
     {
         const auto grid_size = static_cast<std::size_t>(std::ranges::distance(grids));
@@ -48,6 +51,9 @@ namespace egret_detail::interp1d_impl {
 //  [fn] recover_knots
 // -----------------------------------------------------------------------------
     template <typename X, typename Y, egret::cpt::basic_json Json, std::output_iterator<X> XIt, std::output_iterator<Y> YIt>
+        requires
+            egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<X>> &&
+            egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<Y>>
     void recover_knots(const Json& j, XIt xit, YIt yit)
     {
         constexpr auto j2x = "grid" >> egret::util::j2obj::get<X>;
@@ -60,6 +66,9 @@ namespace egret_detail::interp1d_impl {
     }
 
     template <typename X, typename Y, egret::cpt::basic_json Json, std::output_iterator<std::pair<X, Y>> XYIt>
+        requires
+            egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<X>> &&
+            egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<Y>>
     void recover_knots(const Json& j, XYIt xyit)
     {
         constexpr auto j2x = "grid" >> egret::util::j2obj::get<X>;
@@ -71,6 +80,9 @@ namespace egret_detail::interp1d_impl {
     }
 
     template <typename X, typename Y, egret::cpt::basic_json Json>
+        requires
+            egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<X>> &&
+            egret::cpt::deserializable_json_with<Json, egret::util::j2obj::get_t<Y>>
     auto recover_knots(const Json& j)
         -> std::pair<std::vector<X>, std::vector<Y>>
     {

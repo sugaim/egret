@@ -3,7 +3,7 @@
 #include <nlohmann/json_fwd.hpp>
 #include "core/utils/json_utils/j2obj.h"
 #include "egret/markets/rate.h"
-#include "float_rate_cf.h"
+#include "floating_rate_cf.h"
 
 namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------
@@ -25,8 +25,8 @@ namespace egret::inst::cfs {
         typename DiscountTag, typename RateTag, 
         typename DC, typename N = double, typename G = double, typename R = G
     >
-    using term_rate_cf = float_rate_cf<
-        DiscountTag, RateTag, term_rate_definition<DC, G, R>, DC, N>;
+    using term_rate_cf = floating_rate_cf<
+        DiscountTag, RateTag, term_rate_definition<DC, G, R>, DC, N, R>;
 
 } // namespace egret::inst::cfs
 
@@ -36,22 +36,25 @@ namespace nlohmann {
         
         using target_type = egret::inst::cfs::term_rate_definition<DC, G, R>;
 
+        static constexpr auto deser = egret::util::j2obj::construct<target_type>(
+            "rate_daycounter" >> egret::util::j2obj::get<DC>,
+            "reference_start" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "reference_end" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
+            "gearing" >> egret::util::j2obj::get<G>,
+            "spread" >> egret::util::j2obj::get<R>
+        );
         template <typename Json>
+            requires requires (const Json& j) { deser(j); }
         static target_type from_json(const Json& json)
         {
-            namespace util = egret::util;
-            namespace j2obj = util::j2obj;
-            constexpr auto deser = j2obj::construct<target_type>(
-                "rate_daycounter" >> j2obj::get<DC>,
-                "reference_start" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "reference_end" >> j2obj::string.parse_to<std::chrono::sys_days>("%F"),
-                "gearing" >> j2obj::get<G>,
-                "spread" >> j2obj::get<R>
-            );
             return deser(j);
         }
 
         template <typename Json>
+            requires
+                std::is_assignable_v<Json&, const DC&> &&
+                std::is_assignable_v<Json&, const G&> &&
+                std::is_assignable_v<Json&, const R&>
         static void to_json(Json& j, const target_type& cf)
         {
             namespace util = egret::util;

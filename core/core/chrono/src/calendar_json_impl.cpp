@@ -21,7 +21,8 @@ namespace egret::chrono::impl {
         result.reserve(date_array.size());
         for (const auto& item : date_array) {
             assertion(item.is_string(), "some json array item of \"{}\" for {} is not a string.", property_name, debug_tag);
-            auto maybe_date = util::parse<std::chrono::sys_days>(item, "%F");
+            const std::string& str = item;
+            auto maybe_date = util::parse<std::chrono::sys_days>(str, "%F");
             assertion(maybe_date.has_value(), "some json array item of \"{}\" for {} is not in a date format.", property_name, debug_tag);
             result.push_back(*maybe_date);
         }

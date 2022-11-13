@@ -7,7 +7,7 @@
 
 namespace egret::chrono {
     namespace {
-        std::optional<std::vector<std::chrono::sys_days>> get_days(
+        std::optional<std::vector<std::chrono::sys_days>> _get_days(
             const std::filesystem::path& dirpath,
             std::string_view code,
             std::string_view ext,
@@ -40,12 +40,12 @@ namespace egret::chrono {
     auto json_directory_calendar_source::get_additional_holidays(std::string_view code) const
         -> std::optional<std::vector<std::chrono::sys_days>>
     {
-        return get_days(dirpath_, code, ext_, "additional_holidays");
+        return _get_days(dirpath_, code, ext_, "additional_holidays");
     }
     auto json_directory_calendar_source::get_additional_businessdays(std::string_view code) const
         -> std::optional<std::vector<std::chrono::sys_days>>
     {
-        return get_days(dirpath_, code, ext_, "additional_businessdays");
+        return _get_days(dirpath_, code, ext_, "additional_businessdays");
     }
 
 } // namespace egret::chrono

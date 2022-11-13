@@ -76,7 +76,7 @@ namespace nlohmann {
         
         using target_type = egret::fit::yc::scaled_evaluator<Base>;
 
-        template <typename Json>
+        template <egret::cpt::deserializable_json_with<egret::util::j2obj::get_t<Base>> Json>
         static target_type from_json(const Json& j)
         {
             namespace j2obj = egret::util::j2obj;
@@ -87,6 +87,7 @@ namespace nlohmann {
             return deser(j);
         }
         template <typename Json>
+            requires std::is_assignable_v<Json&, const Base&>
         static void to_json(Json& j, const target_type& obj)
         {
             j["base"] = obj.base_component();

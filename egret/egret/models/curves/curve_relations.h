@@ -149,12 +149,11 @@ namespace nlohmann {
 
         using target_type = egret::model::curve_relations<CurveKey>;
 
-        template <typename Json>
+        template <egret::cpt::deserializable_json_with<egret::util::j2obj::get_t<CurveKey>> Json>
         static target_type from_json(const Json& j)
         {
             namespace j2obj = egret::util::j2obj;
-            constexpr build_components = j2obj::array.to_range_of<egret::model::component_curve_identifier>
-                | std::ranges::to<std::vector>();
+            constexpr build_components = j2obj::array.to_vector_of<egret::model::component_curve_identifier>();
 
             egret::assertion(j.is_array(), "Json must be an array, whose elements are expected as an curve relation.");
             target_type result {};
@@ -166,6 +165,7 @@ namespace nlohmann {
             return result;
         }
         template <typename Json>
+            requires std::is_assignable_v<Json&, const std::vector<CurveKey>&>
         static void to_json(Json& j, const target_type& obj)
         {
             j = Json::array();
