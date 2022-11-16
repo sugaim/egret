@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <type_traits>
+#include <compare>
 
 namespace egret::util {
 // -----------------------------------------------------------------------------

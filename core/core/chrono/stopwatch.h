@@ -32,8 +32,8 @@ namespace egret::chrono {
     //
         void start();
         void stop();
-        void restart();
-        void reset();
+        void restart() noexcept;
+        void reset() noexcept;
 
     // -------------------------------------------------------------------------
     //  is_started, is_recording, is_stopped

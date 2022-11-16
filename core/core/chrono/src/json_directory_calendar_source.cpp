@@ -27,7 +27,7 @@ namespace egret::chrono {
 // -----------------------------------------------------------------------------
 //  [class] json_directory_calendar_source
 // -----------------------------------------------------------------------------
-    json_directory_calendar_source::json_directory_calendar_source(std::filesystem::path directory_path, std::string ext)
+    json_directory_calendar_source::json_directory_calendar_source(std::filesystem::path directory_path, std::string ext) noexcept
         : dirpath_(std::move(directory_path)), ext_(std::move(ext))
     {
     }

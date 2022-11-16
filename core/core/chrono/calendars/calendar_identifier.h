@@ -5,6 +5,7 @@
 #include <ranges>
 #include <string>
 #include <array>
+#include <compare>
 #include <nlohmann/json_fwd.hpp>
 #include "core/utils/json_utils/j2obj.h"
 #include "core/utils/string_utils/string_value_map_of.h"

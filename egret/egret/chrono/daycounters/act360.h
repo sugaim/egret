@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <compare>
 
 namespace egret::chrono {
 // -----------------------------------------------------------------------------

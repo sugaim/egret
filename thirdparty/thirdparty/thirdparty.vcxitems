@@ -59,4 +59,10 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\thirdparty\hedley\hedley.hpp" />
     <ClInclude Include="$(MSBuildThisFileDirectory)nlohmann\thirdparty\hedley\hedley_undef.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="$(MSBuildThisFileDirectory)json\nlohmann_json.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)json\.clang-tidy" />
+  </ItemGroup>
 </Project>

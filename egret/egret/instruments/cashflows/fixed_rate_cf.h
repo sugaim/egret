@@ -4,8 +4,8 @@
 #include <nlohmann/json_fwd.hpp>
 #include "core/utils/string_utils/to_string.h"
 #include "core/utils/json_utils/j2obj.h"
-#include "egret/quantities/rate.h"
 #include "egret/chrono/daycounters/concepts.h"
+#include "egret/quantities/rate.h"
 
 namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------

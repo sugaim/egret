@@ -2,9 +2,9 @@
 
 #include <chrono>
 #include "core/assertions/assertion.h"
+#include "egret/chrono/daycounters/concepts.h"
 #include "egret/models/curves/concepts.h"
 #include "egret/models/curves/discount_factor.h"
-#include "egret/chrono/daycounters/concepts.h"
 #include "egret/instruments/cashflows/floating_rate_cf.h"
 
 namespace egret::analytic {
@@ -19,7 +19,7 @@ namespace egret::analytic {
 // -----------------------------------------------------------------------------
     template <
         typename DiscountTag, typename ProjTag, typename RateDef,
-        cpt::daycounter DC, typename N, typename R, 
+        cpt::daycounter DC, typename N,
         typename RateTag, cpt::yield_curve Curve
     >
         requires
@@ -34,7 +34,7 @@ namespace egret::analytic {
                 { calculator(curve, rate_def, acc_stt, acc_end) } -> cpt::non_void;
             }
     constexpr model::forward_rate_t<Curve> evaluate(
-        const inst::cfs::floating_rate_cf<DiscountTag, ProjTag, RateDef, DC, N, R>& cf,
+        const inst::cfs::floating_rate_cf<DiscountTag, ProjTag, RateDef, DC, N>& cf,
         const std::chrono::sys_days& vdt,
         const std::map<RateTag, Curve>& curves
     )

@@ -20,14 +20,14 @@ namespace egret::chrono {
         }
     }
 
-    void stopwatch::restart()
+    void stopwatch::restart() noexcept
     {
         if (end_.has_value()) {
             end_ = std::nullopt;
         }
     }
 
-    void stopwatch::reset()
+    void stopwatch::reset() noexcept
     {
         start_ = std::nullopt;
         end_ = std::nullopt;

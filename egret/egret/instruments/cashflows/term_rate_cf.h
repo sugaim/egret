@@ -26,7 +26,7 @@ namespace egret::inst::cfs {
         typename DC, typename N = double, typename G = double, typename R = G
     >
     using term_rate_cf = floating_rate_cf<
-        DiscountTag, RateTag, term_rate_definition<DC, G, R>, DC, N, R>;
+        DiscountTag, RateTag, term_rate_definition<DC, G, R>, DC, N>;
 
 } // namespace egret::inst::cfs
 

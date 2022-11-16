@@ -28,7 +28,7 @@ namespace egret::chrono {
         json_directory_calendar_source(const this_type&) = default;
         json_directory_calendar_source(this_type&&) = default;
 
-        json_directory_calendar_source(std::filesystem::path directory_path, std::string ext);
+        json_directory_calendar_source(std::filesystem::path directory_path, std::string ext) noexcept;
         explicit json_directory_calendar_source(std::filesystem::path directory_path);
 
         this_type& operator =(const this_type&) = default;

@@ -5,8 +5,8 @@
 #include <nlohmann/json_fwd.hpp>
 #include "core/utils/string_utils/to_string.h"
 #include "core/utils/json_utils/j2obj.h"
-#include "egret/quantities/rate.h"
 #include "egret/chrono/daycounters/concepts.h"
+#include "egret/quantities/rate.h"
 
 namespace egret::inst::cfs {
 // -----------------------------------------------------------------------------
@@ -21,11 +21,10 @@ namespace egret::inst::cfs {
      * @tparam RateDef: rate definition, which includes term, spread and so on.
      * @tparam DC: daycounter
      * @tparam N: notional
-     * @tparam R: fixing rate
     */
     template <
         typename DiscountTag, typename RateTag, typename RateDef,
-        typename DC, typename N = double, typename R = double
+        typename DC, typename N = double
     >
     struct floating_rate_cf {
         DiscountTag discount_tag;
@@ -38,16 +37,16 @@ namespace egret::inst::cfs {
         std::chrono::sys_days payment_date = {};
         std::chrono::sys_days cashout_date = {};
         DC accrual_daycounter;
-        std::optional<rate<R>> fixed_coupon_rate;
+        std::optional<rate<double>> fixed_coupon_rate;
     };
 
 } // namespace egret::inst::cfs
 
 namespace nlohmann {
-    template <typename DiscountTag, typename RateTag, typename RateDef, typename DC, typename N, typename R>
-    struct adl_serializer<egret::inst::cfs::floating_rate_cf<DiscountTag, RateTag, RateDef, DC, N, R>> {
+    template <typename DiscountTag, typename RateTag, typename RateDef, typename DC, typename N>
+    struct adl_serializer<egret::inst::cfs::floating_rate_cf<DiscountTag, RateTag, RateDef, DC, N>> {
 
-        using target_type = egret::inst::cfs::floating_rate_cf<DiscountTag, RateTag, RateDef, DC, N, R>;
+        using target_type = egret::inst::cfs::floating_rate_cf<DiscountTag, RateTag, RateDef, DC, N>;
 
         static constexpr auto deser = egret::util::j2obj::construct<target_type>(
             "discount_tag" >> egret::util::j2obj::get<DiscountTag>,
@@ -60,7 +59,7 @@ namespace nlohmann {
             "payment_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
             "cashout_date" >> egret::util::j2obj::string.parse_to<std::chrono::sys_days>("%F"),
             "accrual_daycounter" >> egret::util::j2obj::get<DC>,
-            "fixed_coupon_rate" >> egret::util::j2obj::get<egret::rate<R>>.optional()
+            "fixed_coupon_rate" >> egret::util::j2obj::get<egret::rate<double>>.optional()
         );
 
         template <typename Json>

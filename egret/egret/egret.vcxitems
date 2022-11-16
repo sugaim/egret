@@ -19,6 +19,21 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)analytic\cashflows\ois_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)analytic\cashflows\term_rate_cf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)auto_link.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\add_tenor.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\adjusment_binary.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\adjustment_interface.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\eom.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\holiday_adjustment.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\roll.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\act360.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\act365f.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\any_daycounter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\concepts.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\daycounter.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\daycounters\daycounter_variant.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\any_evaluator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\composite_evaluator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\concepts.h" />
@@ -49,6 +64,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\holiday_adjustment.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
