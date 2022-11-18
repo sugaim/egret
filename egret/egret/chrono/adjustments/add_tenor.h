@@ -1,7 +1,7 @@
 #pragma once
 
 #include <compare>
-#include "../tenor.h"
+#include "core/chrono/tenor.h"
 #include "adjustment_interface.h"
 
 namespace egret::chrono {

@@ -25,4 +25,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)data\ois.json" />
+  </ItemGroup>
 </Project>

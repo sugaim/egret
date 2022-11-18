@@ -1,0 +1,39 @@
+{
+  "fixed_leg": {
+    "header": {
+      "discount_curve": "TONA",
+      "accrual_daycounter": "ACT365F",
+      "notional": 100
+    },
+    "cashflows": [
+      {
+        "accrual_start": "2022-11-18",
+        "accrual_end": "2022-11-18",
+        "payment_date": "2022-11-18",
+        "cashout_date": "2022-11-18",
+        "entitlement_date": "2022-11-18",
+        "rate": 0.01
+      }
+    ]
+  },
+  "overnight_index_leg": {
+    "header": {
+      "discount_curve": "TONA",
+      "projection_curve": "TONA",
+      "rate_daycounter": "ACT365F",
+      "accrual_daycounter": "ACT365F",
+      "rate_reference_calendar": "TKY",
+      "notional": 100
+    },
+    "cashflows": [
+      {
+        "accrual_start": "2022-11-18",
+        "accrual_end": "2022-11-18",
+        "fixing_date": "2022-11-18",
+        "payment_date": "2022-11-18",
+        "cashout_date": "2022-11-18",
+        "entitlement_date": "2022-11-18"
+      }
+    ]
+  }
+}

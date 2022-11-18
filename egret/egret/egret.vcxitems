@@ -14,10 +14,9 @@
     <ProjectCapability Include="SourceItemsFromImports" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="$(MSBuildThisFileDirectory)analytic\cashflows\fixed_rate_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)analytic\cashflows\floating_rate_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)analytic\cashflows\ois_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)analytic\cashflows\term_rate_cf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\add_bd.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\next_bd.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\prev_bd.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)auto_link.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)chrono\adjustments\add_tenor.h" />
@@ -37,14 +36,19 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\any_evaluator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\composite_evaluator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\concepts.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\fixed_floating_swap.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\fixed_leg.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\irs_constraint.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\leg_evaluator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\ois_constraint.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\overnight_index_leg.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\swap_constraint.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\scaled_evaluator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\term_rate_leg.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\fixed_rate_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\floating_rate_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\ois_cf.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\term_rate_cf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\fixed_leg.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\leg.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\overnight_index_leg.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)instruments\cashflows\term_rate_leg.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)quantities\rate.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)models\curves\any_yield_curve.h" />
@@ -64,6 +68,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\add_bd.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)chrono\src\holiday_adjustment.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -9,15 +9,17 @@ namespace egret::chrono {
     template <typename Derived>
     class adjustment_interface {
     public:
-        template <typename TimePoint>
-        friend TimePoint operator |(const TimePoint& d, const adjustment_interface& self)
-            requires requires (const TimePoint& d, const Derived& self) {
-                { self(d) } -> std::convertible_to<TimePoint>;
-            }
-        {
-            return static_cast<const Derived&>(self)(d);
-        }
+
 
     }; // class adjustment_interface
 
+    template <typename TimePoint, typename Derived>
+    TimePoint operator |(const TimePoint& d, const adjustment_interface<Derived>& self)
+        requires requires (const TimePoint& d, const Derived& self) {
+            { self(d) } -> std::convertible_to<TimePoint>;
+        }
+    {
+        return static_cast<const Derived&>(self)(d);
+    }
+    
 } // namespace egret::chrono

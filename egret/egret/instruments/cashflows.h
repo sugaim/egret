@@ -1,5 +1,7 @@
 #pragma once
 
-#include "cashflows/fixed_rate_cf.h"
-#include "cashflows/float_rate_cf.h"
-#include "cashflows/ois_coupon_cf.h"
+#include "cashflows/leg.h"
+#include "cashflows/fixed_leg.h"
+#include "cashflows/term_rate_leg.h"
+#include "cashflows/overnight_index_leg.h"
+
