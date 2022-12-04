@@ -1,6 +1,7 @@
 #include <nlohmann/json.hpp>
 #include "core/assertions/assertion.h"
 #include "core/utils/string_utils/parse.h"
+#include "core/utils/json_utils/j2obj.h"
 #include "calendar_json_impl.h"
 
 namespace egret::chrono::impl {
@@ -10,22 +11,10 @@ namespace egret::chrono::impl {
         std::string_view debug_tag
     )
     {
-        using array_t = nlohmann::json::array_t;
-
+        const auto deser = util::j2obj::array.to_vector_with(util::j2obj::string.parse_to<std::chrono::sys_days>("%F"));
         assertion(json.contains(property_name), "json data for {} does not have property \"{}\".", debug_tag, property_name);
         const auto& property = json.at(property_name);
-        assertion(property.is_array(), "json property \"{}\" for is not an array.", property_name, debug_tag);
-        const auto& date_array = property;
-
-        std::vector<std::chrono::sys_days> result;
-        result.reserve(date_array.size());
-        for (const auto& item : date_array) {
-            assertion(item.is_string(), "some json array item of \"{}\" for {} is not a string.", property_name, debug_tag);
-            const std::string& str = item;
-            auto maybe_date = util::parse<std::chrono::sys_days>(str, "%F");
-            assertion(maybe_date.has_value(), "some json array item of \"{}\" for {} is not in a date format.", property_name, debug_tag);
-            result.push_back(*maybe_date);
-        }
+        auto result = deser(property);
         return result;
     }
         

@@ -1,7 +1,25 @@
 #pragma once
 
 #include <optional>
+#include <ranges>
+#include <compare>
 #include "core/concepts/non_reference.h"
+
+namespace egret_detail::maybe_iter_impl {
+    template <typename T>
+    struct maybe_iterator {
+        using value_type = T;
+        using iterator_concept = std::forward_iterator_tag;
+
+        constexpr T& operator *() const { return maybe_data.value(); }
+        constexpr maybe_iterator& operator++() noexcept { maybe_data.reset(); return *this; }
+        constexpr maybe_iterator operator++(int) noexcept { auto self = *this; maybe_data.reset(); return self; }
+        constexpr bool operator==(const maybe_iterator& other) const noexcept { return maybe_data.has_value() == other.maybe_data.has_value(); }
+
+        std::optional<std::reference_wrapper<T>> maybe_data;
+    };
+
+} // namespace egret_detail::maybe_iter_impl
 
 namespace egret::util {
 // -----------------------------------------------------------------------------
@@ -9,10 +27,13 @@ namespace egret::util {
 // -----------------------------------------------------------------------------
     template <typename T>
         requires cpt::non_reference<T> || std::is_const_v<std::remove_reference_t<T>>
-    class maybe : private std::optional<T> {
+    class maybe : private std::optional<T>, public std::ranges::view_interface<maybe<T>> {
     private:
         using this_type = maybe;
         using super_type = std::optional<T>;
+
+        using iterator = egret_detail::maybe_iter_impl::maybe_iterator<T>;
+        using const_iterator = egret_detail::maybe_iter_impl::maybe_iterator<const T>;
 
     public:
     // -------------------------------------------------------------------------
@@ -21,7 +42,20 @@ namespace egret::util {
         using super_type::super_type;
 
         this_type& operator =(const this_type&) = delete;
-        this_type& operator =(this_type&&) noexcept(std::is_nothrow_move_assignable_v<super_type>) = delete;
+        constexpr this_type& operator =(this_type&&) noexcept(std::is_nothrow_move_assignable_v<super_type>) = delete;
+
+    // -------------------------------------------------------------------------
+    //  range behavior
+    //
+        constexpr iterator begin() noexcept { return this->has_value() ? iterator(std::ref(**this)) : iterator(); }
+        constexpr const_iterator cbegin() const noexcept { return this->has_value() ? const_iterator(std::cref(**this)) : const_iterator(); }
+        constexpr const_iterator begin() const noexcept { return this->cbegin(); }
+
+        constexpr iterator end() noexcept { return iterator(); }
+        constexpr const_iterator cend() const noexcept { return const_iterator(); }
+        constexpr const_iterator end() const noexcept { return this->cend(); }
+
+        constexpr std::size_t size() const noexcept { return this->has_value() ? 1 : 0; }
 
     // -------------------------------------------------------------------------
     //  monadic behavior
@@ -53,6 +87,8 @@ namespace egret::util {
         using this_type = maybe;
         using super_type = std::optional<std::reference_wrapper<const T>>;
 
+        using const_iterator = egret_detail::maybe_iter_impl::maybe_iterator<const T>;
+
     public:
     // -------------------------------------------------------------------------
     //  ctors, dtor and assigns
@@ -74,6 +110,17 @@ namespace egret::util {
 
         this_type& operator =(const this_type&) noexcept = delete;
         this_type& operator =(this_type&&) noexcept = delete;
+
+    // -------------------------------------------------------------------------
+    //  range behavior
+    //
+        constexpr const_iterator cbegin() const noexcept { return this->has_value() ? const_iterator(std::cref(**this)) : const_iterator(); }
+        constexpr const_iterator begin() const noexcept { return this->cbegin(); }
+
+        constexpr const_iterator cend() const noexcept { return const_iterator(); }
+        constexpr const_iterator end() const noexcept { return this->cend(); }
+
+        constexpr std::size_t size() const noexcept { return this->has_value() ? 1 : 0; }
 
     // -------------------------------------------------------------------------
     //  monadic behavior

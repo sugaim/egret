@@ -105,7 +105,7 @@ namespace egret::util::j2obj {
 // -----------------------------------------------------------------------------
     class array_t : public json_deserializer_interface<array_t> {
     private:
-        template <std::copyable C>
+        template <typename C>
         struct range_transformer {
             template <std::ranges::range JsonArray>
                 requires std::is_invocable_v<const C&, std::ranges::range_reference_t<const JsonArray&>>
@@ -117,7 +117,7 @@ namespace egret::util::j2obj {
 
             std::remove_cvref_t<C> converter;
         };
-        template <std::copyable C>
+        template <typename C>
         struct vector_transformer {
             template <std::ranges::range JsonArray>
                 requires std::is_invocable_v<const C&, std::ranges::range_reference_t<const JsonArray&>>

@@ -6,7 +6,7 @@
       "$ref": "#/definitions/date_list",
       "$comment": "weekdays which are holidays"
     },
-    "additional_bussinessdays": {
+    "additional_businessdays": {
       "$ref": "#/definitions/date_list",
       "$comment": "weekends which are business days"
     }

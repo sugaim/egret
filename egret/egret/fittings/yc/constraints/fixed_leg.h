@@ -4,14 +4,17 @@
 #include "egret/chrono/daycounters/concepts.h"
 #include "egret/models/curves/discount_factor.h"
 #include "egret/instruments/cashflows/fixed_leg.h"
-#include "swap_constraint.h"
+#include "cashflow_evaluator.h"
 
 namespace egret::fit::yc {
 // -----------------------------------------------------------------------------
 //  [struct] cashflow_evaluator
 // -----------------------------------------------------------------------------
     template <typename DiscountTag, cpt::daycounter DC>
-    struct cashflow_evaluator<inst::cfs::fixed_leg_header<DiscountTag, DC>, inst::cfs::fixed_rate_cf<>> {
+    struct cashflow_evaluator<
+        inst::cfs::fixed_leg_header<DiscountTag, DC>, 
+        inst::cfs::fixed_rate_cf<>
+    > {
         
         using header_t = inst::cfs::fixed_leg_header<DiscountTag, DC>;
         using cashflow_t = inst::cfs::fixed_rate_cf<>;

@@ -22,7 +22,13 @@
       "projection_curve": "TONA",
       "rate_daycounter": "ACT365F",
       "accrual_daycounter": "ACT365F",
-      "rate_reference_calendar": "TKY",
+      "rate_reference_calendar": {
+        "combination_type": "all_open",
+        "codes": [
+          "TKY",
+          "NYK"
+        ]
+      },
       "notional": 100
     },
     "cashflows": [

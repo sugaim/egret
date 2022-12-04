@@ -16,8 +16,8 @@ namespace egret::fit::yc {
 // -----------------------------------------------------------------------------
     template <typename DiscountTag, typename FloatingTag, typename DC>
     using irs_constraint = swap_constraint<
-        inst::cfs::fixed_leg_header<DiscountTag, DC>, inst::cfs::fixed_rate_cf<>,
-        inst::cfs::term_rate_leg_header<DiscountTag, FloatingTag, DC>, inst::cfs::term_rate_cashflow<>
+        inst::cfs::term_rate_leg_header<DiscountTag, FloatingTag, DC>, inst::cfs::term_rate_cashflow<>,
+        inst::cfs::fixed_leg_header<DiscountTag, DC>, inst::cfs::fixed_rate_cf<>
     >;
 
 } // namespace egret::fit::yc
@@ -31,8 +31,8 @@ namespace nlohmann {
         using floating_leg = egret::inst::cfs::term_rate_leg<DiscountTag, FloaterTag, DC>;
 
         static constexpr auto decer = egret::util::j2obj::construct<target_type>(
-            "fixed_leg" >> egret::util::j2obj::get<fixed_leg>,
-            "floating_leg" >> egret::util::j2obj::get<floating_leg>
+            "floating_leg" >> egret::util::j2obj::get<floating_leg>,
+            "fixed_leg" >> egret::util::j2obj::get<fixed_leg>
         );
 
         template <typename Json>

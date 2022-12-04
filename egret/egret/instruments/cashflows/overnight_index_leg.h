@@ -42,6 +42,22 @@ namespace egret::inst::cfs {
             header.notional
         };
     }
+    template <typename DiscountTag, typename RateTag, typename DC, typename N>
+    auto from_dto(
+        overnight_index_leg_header<DiscountTag, RateTag, DC, chrono::calendar_identifier, N>&& header,
+        const chrono::calendar_server& server
+    )
+        -> overnight_index_leg_header<DiscountTag, RateTag, DC, chrono::calendar, N>
+    {
+        return {
+            std::move(header.discount_curve),
+            std::move(header.projection_curve),
+            std::move(header.rate_daycounter),
+            std::move(header.accrual_daycounter),
+            server.get(header.rate_reference_calendar),
+            std::move(header.notional)
+        };
+    }
 
     template <typename DiscountTag, typename RateTag, typename DC, typename N>
     auto to_dto(const overnight_index_leg_header<DiscountTag, RateTag, DC, chrono::calendar_identifier, N>& header)
@@ -55,7 +71,19 @@ namespace egret::inst::cfs {
             header.rate_reference_calendar.identifier(),
             header.notional
         };
-
+    }
+    template <typename DiscountTag, typename RateTag, typename DC, typename N>
+    auto to_dto(overnight_index_leg_header<DiscountTag, RateTag, DC, chrono::calendar_identifier, N>&& header)
+        -> overnight_index_leg_header<DiscountTag, RateTag, DC, chrono::calendar_identifier, N>
+    {
+        return {
+            std::move(header.discount_curve),
+            std::move(header.projection_curve),
+            std::move(header.rate_daycounter),
+            std::move(header.accrual_daycounter),
+            header.rate_reference_calendar.identifier(),
+            std::move(header.notional)
+        };
     }
 
 // -----------------------------------------------------------------------------
@@ -118,7 +146,7 @@ namespace egret::inst::cfs {
     )
     {
         return {
-            from_dto(leg.header(), server),
+            from_dto(std::move(leg).header(), server),
             std::move(leg).cashflows()
         };
     }
@@ -146,7 +174,7 @@ namespace egret::inst::cfs {
     )
     {
         return {
-            to_dto(leg.header()),
+            to_dto(std::move(leg).header()),
             std::move(leg).cashflows()
         };
     }

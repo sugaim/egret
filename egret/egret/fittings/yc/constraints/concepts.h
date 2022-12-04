@@ -5,6 +5,16 @@
 #include "egret/models/curves/concepts.h"
 #include "egret/models/curves/any_yield_curve.h"
 
+namespace egret::fit::yc {
+// -----------------------------------------------------------------------------
+//  [struct] specializable_evaluator
+// -----------------------------------------------------------------------------
+    template <typename T>
+    struct specializable_evaluator {
+    };
+
+} // namespace egret::fit::yc
+
 namespace egret_detail::ycc_impl {
     void evaluate(auto&&, auto&&, auto&&) = delete;
 
@@ -12,6 +22,9 @@ namespace egret_detail::ycc_impl {
     public:
         template <typename T, typename Tag, egret::cpt::yield_curve Curve>
             requires 
+            requires (const T& evaluator, const std::chrono::sys_days& vdt, const std::map<Tag, Curve>& curves) {
+                    { egret::fit::yc::specializable_evaluator<T>{}(evaluator, vdt, curves) } -> egret::cpt::non_void;
+                } ||
                 requires (const T& evaluator, const std::chrono::sys_days& vdt, const std::map<Tag, Curve>& curves) {
                     { evaluator.evaluate(vdt, curves) } -> egret::cpt::non_void;
                 } ||
@@ -20,10 +33,16 @@ namespace egret_detail::ycc_impl {
                 }
         auto operator()(const T& evaluator, const std::chrono::sys_days& vdt, const std::map<Tag, Curve>& curves) const
         {
+            constexpr bool has_specialization = requires (const T& e, const std::chrono::sys_days& v, const std::map<Tag, Curve>& c) {
+                { egret::fit::yc::specializable_evaluator<T>{}(e, v, c) } -> egret::cpt::non_void;
+            };
             constexpr bool has_mf = requires (const T& e, const std::chrono::sys_days& v, const std::map<Tag, Curve>& c) {
                 { e.evaluate(v, c) } -> egret::cpt::non_void;
             };
-            if constexpr (has_mf) {
+            if constexpr (has_specialization) {
+                return egret::fit::yc::specializable_evaluator<T>{}(evaluator, vdt, curves);
+            }
+            else if constexpr (has_mf) {
                 return evaluator.evaluate(vdt, curves);
             }
             else {

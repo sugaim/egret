@@ -38,7 +38,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\concepts.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\fixed_leg.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\irs_constraint.h" />
-    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\leg_evaluator.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\cashflow_evaluator.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\ois_constraint.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\overnight_index_leg.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)fittings\yc\constraints\swap_constraint.h" />

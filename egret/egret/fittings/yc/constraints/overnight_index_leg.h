@@ -7,14 +7,17 @@
 #include "egret/chrono/adjustments/next_bd.h"
 #include "egret/models/curves/discount_factor.h"
 #include "egret/instruments/cashflows/overnight_index_leg.h"
-#include "swap_constraint.h"
+#include "cashflow_evaluator.h"
 
 namespace egret::fit::yc {
 // -----------------------------------------------------------------------------
 //  [struct] cashflow_evaluator
 // -----------------------------------------------------------------------------
     template <typename DiscountTag, typename RateTag, typename DC>
-    struct cashflow_evaluator<inst::cfs::overnight_index_leg_header<DiscountTag, RateTag, DC>, inst::cfs::overnight_index_cashflow<>> {
+    struct cashflow_evaluator<
+        inst::cfs::overnight_index_leg_header<DiscountTag, RateTag, DC>, 
+        inst::cfs::overnight_index_cashflow<>
+    > {
         
         using header_t = inst::cfs::overnight_index_leg_header<DiscountTag, RateTag, DC>;
         using cashflow_t = inst::cfs::overnight_index_cashflow<>;

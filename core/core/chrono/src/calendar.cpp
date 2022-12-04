@@ -15,21 +15,37 @@ namespace egret::chrono {
 //  [fn] setup_additional_hols
 // -----------------------------------------------------------------------------
     namespace {
-        template <typename Pred>
+        struct _preparation_for_additional_holidays {
+            static constexpr auto is_invalid = [](const std::chrono::sys_days& d)
+            {
+                const auto wd = std::chrono::weekday(d);
+                return wd == std::chrono::Saturday || wd == std::chrono::Sunday;
+            };
+        };
+        struct _preparation_for_additional_businessdays {
+            static constexpr auto is_invalid = [](const std::chrono::sys_days& d)
+            {
+                const auto wd = std::chrono::weekday(d);
+                return wd != std::chrono::Saturday && wd != std::chrono::Sunday;
+            };
+        };
+        
+        template <typename Preparation>
         std::vector<std::chrono::sys_days> _setup_additional_xdays(
             std::vector<std::chrono::sys_days>&& data,
-            const Pred& pred,
-            bool for_additional_holidays
+            const Preparation& prep
         )
         {
+            constexpr bool for_additional_holidays = std::is_same_v<Preparation, _preparation_for_additional_holidays>;
+
             std::ranges::sort(data);
             data.erase(std::unique(data.begin(), data.end()), data.end());
 
-            if (const auto cnt = std::ranges::count_if(data, pred); cnt != 0) {
+            if (const auto cnt = std::ranges::count_if(data, prep.is_invalid); cnt != 0) {
                 std::string invalid_dates;
                 invalid_dates.reserve(14 * cnt + 5);
                 auto inserter = std::back_inserter(invalid_dates);
-                for (const auto& invalid_date : data | std::views::filter(std::not_fn(pred))) {
+                for (const auto& invalid_date : data | std::views::filter(prep.is_invalid)) {
                     inserter = std::format_to(inserter, "'{}', ", invalid_date);
                 }
                 throw exception(
@@ -73,8 +89,8 @@ namespace egret::chrono {
     )
         : impl_(std::make_shared<impl>(
             std::move(identifier),
-            _setup_additional_xdays(std::move(additional_hols), _is_weekend, true),
-            _setup_additional_xdays(std::move(additional_bds), _is_weekday, false)
+            _setup_additional_xdays(std::move(additional_hols), _preparation_for_additional_holidays{}),
+            _setup_additional_xdays(std::move(additional_bds), _preparation_for_additional_businessdays{})
         ))
     {
     }

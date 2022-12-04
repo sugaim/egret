@@ -50,6 +50,9 @@ namespace egret::chrono {
         std::filesystem::path dirpath_;
         std::string ext_;
 
+        struct cache;
+        std::shared_ptr<cache> cache_;
+
     }; // class json_directory_calendar_source
 
 } // namespace egret::chrono

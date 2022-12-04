@@ -13,13 +13,13 @@ namespace egret::chrono {
             }
 
             auto add_hols = [&src, &code] {
-                auto maybe_add_hols = chrono::get_additional_holidays(src, code);
+                auto maybe_add_hols = src.get_additional_holidays(code);
                 return maybe_add_hols 
                     ? *std::move(maybe_add_hols)
                     : throw exception("Calendar source does not have additional holiday data for \"{}\"", code);
             }();
             auto add_bds = [&src, &code] {
-                auto maybe_add_bds = chrono::get_additional_businessdays(src, code);
+                auto maybe_add_bds = src.get_additional_businessdays(code);
                 return maybe_add_bds
                     ? *std::move(maybe_add_bds)
                     : throw exception("Calendar source does not have additional business day data for \"{}\"", code);
@@ -43,58 +43,53 @@ namespace egret::chrono {
                 return map.at(key);
             }
 
+            const auto calendars = key.codes 
+                | std::views::transform([&src, &single_map](const auto& code) { 
+                    return get_calendar(src, single_map, code); 
+                })
+                | std::ranges::to<std::vector>();
+
             std::vector<std::chrono::sys_days> add_hols;
             std::vector<std::chrono::sys_days> add_bds;
+            std::vector<std::chrono::sys_days> prev_add_hols {};
+            std::vector<std::chrono::sys_days> prev_add_bds {};
 
             // reserve memory
             {
-                const auto cals = key.codes | std::views::transform([&src, &single_map](const auto& code) { return get_calendar(src, single_map, code); });
-                const auto hol_cals_szs = cals | std::views::transform([](const auto& cal) { return cal.additional_holidays().size(); });
-                const auto bd_cals_szs  = cals | std::views::transform([](const auto& cal) { return cal.additional_businessdays().size(); });
+                const auto hol_cals_szs = calendars | std::views::transform([](const auto& cal) { return cal.additional_holidays().size(); });
+                const auto bd_cals_szs  = calendars | std::views::transform([](const auto& cal) { return cal.additional_businessdays().size(); });
 
-                if (key.combination == calendar_combination::all_open) {
+                switch (key.combination) {
+                case calendar_combination::all_open:
                     add_hols.reserve(std::accumulate(hol_cals_szs.begin(), hol_cals_szs.end(), static_cast<std::size_t>(0)));
                     add_bds.reserve(std::ranges::max(bd_cals_szs));
-                }
-                else {
+                    break;
+                case calendar_combination::any_open:
                     add_hols.reserve(std::ranges::max(hol_cals_szs));
                     add_bds.reserve(std::accumulate(bd_cals_szs.begin(), bd_cals_szs.end(), static_cast<std::size_t>(0)));
+                    break;
+                default:
+                    break;
                 }
-            }
-            
-            // it is assumed that 1 < key.codes.size(). initial intersection/union
-            auto it = key.codes.begin();
-            {
-                const auto cal1 = get_calendar(src, single_map, *it);
-                const auto cal2 = get_calendar(src, single_map, *(++it));
-                if (key.combination == calendar_combination::all_open) {
-                    std::ranges::set_union(cal1.additional_holidays(), cal2.additional_holidays(), std::back_inserter(add_hols));
-                    std::ranges::set_intersection(cal1.additional_businessdays(), cal2.additional_businessdays(), std::back_inserter(add_bds));
-                }
-                else {
-                    std::ranges::set_intersection(cal1.additional_holidays(), cal2.additional_holidays(), std::back_inserter(add_hols));
-                    std::ranges::set_union(cal1.additional_businessdays(), cal2.additional_businessdays(), std::back_inserter(add_bds));
-                }
-            }
-
-            if (it == key.codes.end()) {
-                auto result = calendar(key,  std::move(add_hols), std::move(add_bds));
-                map.emplace(key, result);
-                return result;
+                prev_add_hols.reserve(add_hols.capacity());
+                prev_add_bds.reserve(add_bds.capacity());
             }
 
             // intersect/union with remained calendars
-            for (auto prev_add_hols = add_hols, prev_add_bds = add_bds; it != key.codes.end(); ++it) {
-                const auto& cal = get_calendar(src, single_map, *it);
+            for (const auto& cal : calendars) {
                 add_hols.clear();
                 add_bds.clear();
-                if (key.combination == calendar_combination::all_open) {
+                switch (key.combination) {
+                case calendar_combination::all_open:
                     std::ranges::set_union(prev_add_hols, cal.additional_holidays(), std::back_inserter(add_hols));
                     std::ranges::set_intersection(prev_add_bds, cal.additional_businessdays(), std::back_inserter(add_bds));
-                }
-                else {
+                    break;
+                case calendar_combination::any_open:
                     std::ranges::set_intersection(prev_add_hols, cal.additional_holidays(), std::back_inserter(add_hols));
                     std::ranges::set_union(prev_add_bds, cal.additional_businessdays(), std::back_inserter(add_bds));
+                    break;
+                default:
+                    break;
                 }
                 prev_add_hols = add_hols;
                 prev_add_bds = add_bds;
