@@ -30,7 +30,7 @@
       <ModuleOutputFile>$(IntDir)%(Directory)</ModuleOutputFile>
       <ModuleDependenciesFile>$(IntDir)%(Directory)</ModuleDependenciesFile>
       <ObjectFileName>$(IntDir)%(Directory)</ObjectFileName>
-      <AdditionalIncludeDirectories>$(SolutionDir)src\;$(SolutionDir)\thirdparty\json\include;$(SolutionDir)\thirdparty\nameof\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)src\;$(SolutionDir)thirdparty\submodules\json\include;$(SolutionDir)thirdparty\submodules\nameof\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <DisableAnalyzeExternal>true</DisableAnalyzeExternal>
