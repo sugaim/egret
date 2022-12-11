@@ -34,24 +34,24 @@
     <Import Project="$(SolutionDir)\tests\core.test\core.test.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(SolutionDir)\props\win\base.props" />
-    <Import Project="$(SolutionDir)\props\win\tests.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\base.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\tests.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(SolutionDir)\props\win\base.props" />
-    <Import Project="$(SolutionDir)\props\win\tests.props" />
-    <Import Project="$(SolutionDir)\props\win\win32.props" />
-    <Import Project="$(SolutionDir)\props\win\debug.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\base.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\tests.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\win32.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(SolutionDir)\props\win\base.props" />
-    <Import Project="$(SolutionDir)\props\win\tests.props" />
-    <Import Project="$(SolutionDir)\props\win\debug.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\base.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\tests.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(SolutionDir)\props\win\base.props" />
-    <Import Project="$(SolutionDir)\props\win\tests.props" />
-    <Import Project="$(SolutionDir)\props\win\win32.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\base.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\tests.props" />
+    <Import Project="$(SolutionDir)\buildproj\_propertysheets\win\win32.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
