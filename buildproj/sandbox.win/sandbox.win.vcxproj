@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\core\buildproj\core.win.vcxproj">
+    <ProjectReference Include="$(SolutionDir)\buildproj\core.win\core.win.vcxproj">
       <Project>{4b0804d9-1a4b-4836-aa6d-8d8f8f528092}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\egret\buildproj\egret.win.vcxproj">
+    <ProjectReference Include="$(SolutionDir)\buildproj\egret.win\egret.win.vcxproj">
       <Project>{842ae741-19c4-4418-b493-faf1d6d2c43e}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -58,33 +58,33 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="Shared">
-    <Import Project="..\sandbox\sandbox.vcxitems" Label="Shared" />
+    <Import Project="$(SolutionDir)\sandbox\sandbox\sandbox.vcxitems" Label="Shared" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\props\win\base.props" />
-    <Import Project="..\..\props\win\console.props" />
-    <Import Project="..\..\props\win\win32.props" />
-    <Import Project="..\..\props\win\debug.props" />
+    <Import Project="$(SolutionDir)\props\win\base.props" />
+    <Import Project="$(SolutionDir)\props\win\console.props" />
+    <Import Project="$(SolutionDir)\props\win\win32.props" />
+    <Import Project="$(SolutionDir)\props\win\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\props\win\base.props" />
-    <Import Project="..\..\props\win\console.props" />
-    <Import Project="..\..\props\win\win32.props" />
-    <Import Project="..\..\props\win\release.props" />
+    <Import Project="$(SolutionDir)\props\win\base.props" />
+    <Import Project="$(SolutionDir)\props\win\console.props" />
+    <Import Project="$(SolutionDir)\props\win\win32.props" />
+    <Import Project="$(SolutionDir)\props\win\release.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\props\win\console.props" />
-    <Import Project="..\..\props\win\base.props" />
-    <Import Project="..\..\props\win\debug.props" />
+    <Import Project="$(SolutionDir)\props\win\console.props" />
+    <Import Project="$(SolutionDir)\props\win\base.props" />
+    <Import Project="$(SolutionDir)\props\win\debug.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\props\win\base.props" />
-    <Import Project="..\..\props\win\console.props" />
-    <Import Project="..\..\props\win\release.props" />
+    <Import Project="$(SolutionDir)\props\win\base.props" />
+    <Import Project="$(SolutionDir)\props\win\console.props" />
+    <Import Project="$(SolutionDir)\props\win\release.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

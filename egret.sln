@@ -5,33 +5,33 @@ VisualStudioVersion = 17.4.32916.344
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{C7C26527-85AD-4A01-9399-ABD1CF9FD208}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "core\core\core.vcxitems", "{6034B959-4030-4C36-A8BE-1B120DFEC37B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core", "src\core\core.vcxitems", "{6034B959-4030-4C36-A8BE-1B120DFEC37B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egret", "egret\egret\egret.vcxitems", "{E8C35B46-E92F-4597-AF26-C6130592CC22}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egret", "src\egret\egret.vcxitems", "{E8C35B46-E92F-4597-AF26-C6130592CC22}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{A75724AA-FCEF-4CFB-8CE9-5418E43E4B5B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox", "sandbox\sandbox\sandbox.vcxitems", "{D98C0772-E37D-456F-A249-0FC10FB99370}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win.apps", "win.apps", "{F7D8731B-97C5-42D6-8773-AAB9BC4C0200}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build.win.apps", "_build.win.apps", "{F7D8731B-97C5-42D6-8773-AAB9BC4C0200}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox.win", "sandbox\sandbox.win\sandbox.win.vcxproj", "{0002651D-5C06-4D25-962A-58C17626F9C3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sandbox.win", "buildproj\sandbox.win\sandbox.win.vcxproj", "{0002651D-5C06-4D25-962A-58C17626F9C3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win.libs", "win.libs", "{8EEDB738-F3EC-432B-89A9-D5617F4E529B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build.win.libs", "_build.win.libs", "{8EEDB738-F3EC-432B-89A9-D5617F4E529B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.win", "core\core.win\core.win.vcxproj", "{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.win", "buildproj\core.win\core.win.vcxproj", "{4B0804D9-1A4B-4836-AA6D-8D8F8F528092}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egret.win", "egret\egret.win\egret.win.vcxproj", "{842AE741-19C4-4418-B493-FAF1D6D2C43E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "egret.win", "buildproj\egret.win\egret.win.vcxproj", "{842AE741-19C4-4418-B493-FAF1D6D2C43E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thirdparty", "thirdparty\thirdparty\thirdparty.vcxitems", "{055A0DC0-C57B-4E33-B79A-5B2559333773}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "thirdparty", "thirdparty\thirdparty.vcxitems", "{055A0DC0-C57B-4E33-B79A-5B2559333773}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E6E7BD26-B45F-46F7-ABD0-730DC31E880C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.test", "core\core.test\core.test.vcxitems", "{5235F52E-C12F-436E-B6C5-7883B1A2BB4C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.test", "tests\core.test\core.test.vcxitems", "{5235F52E-C12F-436E-B6C5-7883B1A2BB4C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win.tests", "win.tests", "{3B5DFDFA-08BA-4D04-97E8-3D0C2292ED44}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_build.win.tests", "_build.win.tests", "{3B5DFDFA-08BA-4D04-97E8-3D0C2292ED44}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.test.win", "core\core.test.win\core.test.win.vcxproj", "{75CBCD5B-C0C6-4BE5-A660-54D3BDFA87CB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "core.test.win", "buildproj\core.test.win\core.test.win.vcxproj", "{75CBCD5B-C0C6-4BE5-A660-54D3BDFA87CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,13 +93,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		sandbox\sandbox\sandbox.vcxitems*{0002651d-5c06-4d25-962a-58c17626f9c3}*SharedItemsImports = 4
-		thirdparty\thirdparty\thirdparty.vcxitems*{055a0dc0-c57b-4e33-b79a-5b2559333773}*SharedItemsImports = 9
-		core\core\core.vcxitems*{4b0804d9-1a4b-4836-aa6d-8d8f8f528092}*SharedItemsImports = 4
-		core\core.test\core.test.vcxitems*{5235f52e-c12f-436e-b6c5-7883b1a2bb4c}*SharedItemsImports = 9
-		core\core\core.vcxitems*{6034b959-4030-4c36-a8be-1b120dfec37b}*SharedItemsImports = 9
-		core\core.test\core.test.vcxitems*{75cbcd5b-c0c6-4be5-a660-54d3bdfa87cb}*SharedItemsImports = 4
-		egret\egret\egret.vcxitems*{842ae741-19c4-4418-b493-faf1d6d2c43e}*SharedItemsImports = 4
+		thirdparty\thirdparty.vcxitems*{055a0dc0-c57b-4e33-b79a-5b2559333773}*SharedItemsImports = 9
+		src\core\core.vcxitems*{4b0804d9-1a4b-4836-aa6d-8d8f8f528092}*SharedItemsImports = 4
+		tests\core.test\core.test.vcxitems*{5235f52e-c12f-436e-b6c5-7883b1a2bb4c}*SharedItemsImports = 9
+		src\core\core.vcxitems*{6034b959-4030-4c36-a8be-1b120dfec37b}*SharedItemsImports = 9
+		tests\core.test\core.test.vcxitems*{75cbcd5b-c0c6-4be5-a660-54d3bdfa87cb}*SharedItemsImports = 4
+		src\egret\egret.vcxitems*{842ae741-19c4-4418-b493-faf1d6d2c43e}*SharedItemsImports = 4
 		sandbox\sandbox\sandbox.vcxitems*{d98c0772-e37d-456f-a249-0fc10fb99370}*SharedItemsImports = 9
-		egret\egret\egret.vcxitems*{e8c35b46-e92f-4597-af26-c6130592cc22}*SharedItemsImports = 9
+		src\egret\egret.vcxitems*{e8c35b46-e92f-4597-af26-c6130592cc22}*SharedItemsImports = 9
 	EndGlobalSection
 EndGlobal

@@ -38,9 +38,10 @@ namespace egret::tests { namespace {
             const std::size_t size = std::char_traits<CharT>::length(data);
             std::vector<CharT> result {};
             result.resize(size);
-            for (std::size_t i = 0; i < size; ++i) {
-                result[i] = data[i];
-            }
+            std::memcpy(result.data(), data, size);
+            //for (std::size_t i = 0; i < size; ++i) {
+            //    result[i] = data[i];
+            //}
             return result; 
         }
     };
@@ -51,19 +52,16 @@ namespace egret::tests { namespace {
     std::string escape_escaped(const std::string_view sv)
     {
         std::string result;
+        const std::map<char, std::string_view> escape_map{
+            {'\"', "\\\""},
+            {'\n', "\\n"},
+            {'\t', "\\t"},
+        };
         for (const char ch : sv) {
-            switch (ch)
-            {
-            case '\"':
-                result += "\\\"";
-                break;                
-            case '\n':
-                result += "\\n";
-                break;
-            case '\t':
-                result += "\\t";
-                break;
-            default:
+            if (escape_map.contains(ch)) {
+                result += escape_map.at(ch);
+            }
+            else {
                 result += ch;
             }
         }
