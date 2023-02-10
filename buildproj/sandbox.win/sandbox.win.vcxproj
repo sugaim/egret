@@ -95,6 +95,7 @@
     </Link>
     <ClCompile>
       <PreprocessorDefinitions>EGRET_SOLUTION_DIRECTORY=R"($(SolutionDir))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -117,6 +118,7 @@
     </Link>
     <ClCompile>
       <PreprocessorDefinitions>EGRET_SOLUTION_DIRECTORY=R"($(SolutionDir))";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
