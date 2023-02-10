@@ -16,7 +16,7 @@ steps:
     platform: 'x64'
     configuration: 'Release'
     clean: true
-    maximumCpuCount: true
+    maximumCpuCount: false
     restoreNugetPackages: true
     msbuildArchitecture: 'x64'
     createLogFile: true
