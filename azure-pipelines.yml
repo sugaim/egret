@@ -15,8 +15,3 @@ steps:
     solution: '**\*.sln'
     platform: 'x64'
     configuration: 'Release'
-    clean: true
-    maximumCpuCount: false
-    restoreNugetPackages: true
-    msbuildArchitecture: 'x64'
-    createLogFile: true
